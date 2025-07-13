@@ -1,1 +1,1 @@
-# bombermanGame
+# Bomberman
