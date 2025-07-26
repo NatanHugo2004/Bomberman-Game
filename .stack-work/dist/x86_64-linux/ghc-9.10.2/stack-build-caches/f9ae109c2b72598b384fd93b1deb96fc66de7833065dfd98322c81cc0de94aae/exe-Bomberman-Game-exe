@@ -1,0 +1,18 @@
+/home/natan/.ghcup/ghc/9.10.2/lib/ghc-9.10.2/lib/x86_64-linux-ghc-9.10.2/rts-1.0.2/include/ghcversion.h:
+  hash: c52a97980facd4ffbe17b1f1eec95b8061f4dbbf4ce69384e851f410cb70dc0a
+/home/natan/Bomberman-Game/.stack-work/dist/x86_64-linux/ghc-9.10.2/build/Bomberman-Game-exe/autogen/Paths_Bomberman_Game.hs:
+  hash: 6174e6ad4a02c2c120acb4e890f649b1fe133bdacf0ed5c0d8e1cc74ce0c048a
+/home/natan/Bomberman-Game/.stack-work/dist/x86_64-linux/ghc-9.10.2/build/Bomberman-Game-exe/autogen/cabal_macros.h:
+  hash: 43f22c97b27babfd9ae5879b0a5bbd99538030ed1a4a186f441497b01ff3752c
+/home/natan/Bomberman-Game/Bomberman-Game.cabal:
+  hash: 920ccbeec8747783650f8a6f12f3889cdd5fbd3669407225c1d3a9ccad7b6554
+/home/natan/Bomberman-Game/CHANGELOG.md:
+  hash: 9655798a5b57170a4f6f8b1103ad67350f1af6618fc7089e2dc4b880e3898144
+/home/natan/Bomberman-Game/README.md:
+  hash: 643c4c5d093804e31ff7121b26f96705dcb9420ac8d2dfbac391be096cfb99ef
+/home/natan/Bomberman-Game/app/Main.hs:
+  hash: 46a0d9b093dd50e80e2399b511b01d32d82eeecfe419bf1effff0483ec990fe4
+/home/natan/Bomberman-Game/package.yaml:
+  hash: 32bd0a2fb0b09d47f4910d3d07248231a96d5baccd74132dfc0af2bbcb1331fd
+/usr/include/stdc-predef.h:
+  hash: cb08cd5d4cc059a90833ac48a284d25016e8d56ded8ad4cd98d8ac59cc5053f3
