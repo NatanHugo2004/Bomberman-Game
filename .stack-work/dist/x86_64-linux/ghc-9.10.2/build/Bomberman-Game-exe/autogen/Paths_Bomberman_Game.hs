@@ -46,12 +46,12 @@ getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: 
 
 
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
-bindir     = "/home/natan/Bomberman-Game/.stack-work/install/x86_64-linux/f9ae109c2b72598b384fd93b1deb96fc66de7833065dfd98322c81cc0de94aae/9.10.2/bin"
-libdir     = "/home/natan/Bomberman-Game/.stack-work/install/x86_64-linux/f9ae109c2b72598b384fd93b1deb96fc66de7833065dfd98322c81cc0de94aae/9.10.2/lib/x86_64-linux-ghc-9.10.2-aac9/Bomberman-Game-0.1.0.0-LknmGf9wH2d2Aj4gf2WI9c-Bomberman-Game-exe"
-dynlibdir  = "/home/natan/Bomberman-Game/.stack-work/install/x86_64-linux/f9ae109c2b72598b384fd93b1deb96fc66de7833065dfd98322c81cc0de94aae/9.10.2/lib/x86_64-linux-ghc-9.10.2-aac9"
-datadir    = "/home/natan/Bomberman-Game/.stack-work/install/x86_64-linux/f9ae109c2b72598b384fd93b1deb96fc66de7833065dfd98322c81cc0de94aae/9.10.2/share/x86_64-linux-ghc-9.10.2-aac9/Bomberman-Game-0.1.0.0"
-libexecdir = "/home/natan/Bomberman-Game/.stack-work/install/x86_64-linux/f9ae109c2b72598b384fd93b1deb96fc66de7833065dfd98322c81cc0de94aae/9.10.2/libexec/x86_64-linux-ghc-9.10.2-aac9/Bomberman-Game-0.1.0.0"
-sysconfdir = "/home/natan/Bomberman-Game/.stack-work/install/x86_64-linux/f9ae109c2b72598b384fd93b1deb96fc66de7833065dfd98322c81cc0de94aae/9.10.2/etc"
+bindir     = "/mnt/c/Users/may_a/Documents/my_projects/Bomberman-Game/.stack-work/install/x86_64-linux/5afa23b490347518766af50b4fed67e763096396fd56c8d4fb25fb7003b80e48/9.10.2/bin"
+libdir     = "/mnt/c/Users/may_a/Documents/my_projects/Bomberman-Game/.stack-work/install/x86_64-linux/5afa23b490347518766af50b4fed67e763096396fd56c8d4fb25fb7003b80e48/9.10.2/lib/x86_64-linux-ghc-9.10.2-aac9/Bomberman-Game-0.1.0.0-LknmGf9wH2d2Aj4gf2WI9c-Bomberman-Game-exe"
+dynlibdir  = "/mnt/c/Users/may_a/Documents/my_projects/Bomberman-Game/.stack-work/install/x86_64-linux/5afa23b490347518766af50b4fed67e763096396fd56c8d4fb25fb7003b80e48/9.10.2/lib/x86_64-linux-ghc-9.10.2-aac9"
+datadir    = "/mnt/c/Users/may_a/Documents/my_projects/Bomberman-Game/.stack-work/install/x86_64-linux/5afa23b490347518766af50b4fed67e763096396fd56c8d4fb25fb7003b80e48/9.10.2/share/x86_64-linux-ghc-9.10.2-aac9/Bomberman-Game-0.1.0.0"
+libexecdir = "/mnt/c/Users/may_a/Documents/my_projects/Bomberman-Game/.stack-work/install/x86_64-linux/5afa23b490347518766af50b4fed67e763096396fd56c8d4fb25fb7003b80e48/9.10.2/libexec/x86_64-linux-ghc-9.10.2-aac9/Bomberman-Game-0.1.0.0"
+sysconfdir = "/mnt/c/Users/may_a/Documents/my_projects/Bomberman-Game/.stack-work/install/x86_64-linux/5afa23b490347518766af50b4fed67e763096396fd56c8d4fb25fb7003b80e48/9.10.2/etc"
 
 getBinDir     = catchIO (getEnv "Bomberman_Game_bindir")     (\_ -> return bindir)
 getLibDir     = catchIO (getEnv "Bomberman_Game_libdir")     (\_ -> return libdir)
