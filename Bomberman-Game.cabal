@@ -25,10 +25,11 @@ source-repository head
 
 library
   exposed-modules:
-      Destructibles
+      Display
+      GameLoop
       Map
       Menu
-      Walls
+      Structures
   other-modules:
       Paths_Bomberman_Game
   autogen-modules:

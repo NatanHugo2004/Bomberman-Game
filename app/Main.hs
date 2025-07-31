@@ -1,11 +1,16 @@
 module Main (main) where
 
-import Walls
-import Destructibles
-import Map
+import Structures
+import GameLoop
+import Map 
 import Menu
 
 main :: IO ()
 main = do
-     display
-     movePointer 0 10
+    startGame
+
+startGame :: IO ()
+startGame = do
+    let gameConfigs = GameConfigs 8 18
+    let initialMap = createMap (height gameConfigs) (width gameConfigs)
+    gameLoop initialMap
