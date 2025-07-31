@@ -25,6 +25,8 @@ source-repository head
 
 library
   exposed-modules:
+      Destructibles
+      Map
       Walls
   other-modules:
       Paths_Bomberman_Game

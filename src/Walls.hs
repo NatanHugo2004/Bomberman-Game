@@ -25,7 +25,5 @@ displayWalls (h:hs) = do
     putStr wallSymboll
     displayWalls hs
 
-display :: IO()
-display = do
-    clearScreen
-    displayWalls walls
+isWall :: (Int, Int) -> Bool
+isWall pos = pos `elem` walls

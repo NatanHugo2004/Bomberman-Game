@@ -1,6 +1,8 @@
 module Main (main) where
 
 import Walls
+import Destructibles
+import Map
 
 main :: IO ()
 main = do
