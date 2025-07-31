@@ -1,25 +1,20 @@
 module Walls where
-import System.Console.ANSI
-import System.IO
 
-newtype Point = Point (Int, Int) deriving (Eq)
+import Structures 
 
-data Map = Map { 
-        walls :: [Point],
-        player :: Point
-    }
+-- TODO: VERIFICAR SE DÁ PRA FAZER ALGO MAIS BONITO
+charToDirection :: Char -> (Point -> Point)
+charToDirection 'a' = \p -> createPoint ((takeX p) - 1) (takeY p)
+charToDirection 'd' = \p -> createPoint ((takeX p) + 1) (takeY p)
+charToDirection 'w' = \p -> createPoint (takeX p) ((takeY p) - 1)
+charToDirection 's' = \p -> createPoint (takeX p) ((takeY p) + 1)
+charToDirection c = \p -> createPoint (takeX p) (takeY p)
 
-data GameConfigs = GameConfigs {
-        height :: Int,
-        width :: Int
-    }
+movePlayer :: (Point -> Point) -> Point -> Point
+movePlayer direction player = direction player
 
-data Symboll = Wall | Box | Player 
-
-symbollToChar :: Symboll -> Char
-symbollToChar Wall   = '#'
-symbollToChar Box    = '*'
-symbollToChar Player = '@'
+isValidPlayerPosition :: Map -> Point -> Bool
+isValidPlayerPosition map newPosition = not (elem newPosition (walls map))
 
 createMap :: Int -> Int -> Point -> Map
 createMap height width point = Map walls point
@@ -28,33 +23,13 @@ createMap height width point = Map walls point
                 [createPoint x y | x <- [0,width], y <- [1..height - 1]] ++ 
                 [createPoint x y | x <- [2, 4..width - 2], y <- [2, 4..height - 2]]
 
-createPoint :: Int -> Int -> Point
-createPoint x y = (Point (x, y))
-
-takeX :: Point -> Int
-takeX (Point(x, y)) = x
-
-takeY :: Point -> Int
-takeY (Point(x, y)) = y
-
-movePointer :: Int -> Int -> IO()
-movePointer x y = setCursorPosition y x
-
-displayWalls :: [Point] -> IO()
-displayWalls [] = return ()
-displayWalls (h:hs) = do
-    movePointer (takeX h) (takeY h)
-    putChar (symbollToChar Wall)
-    displayWalls hs
-
-displayPlayer :: Point -> IO()
-displayPlayer point = do
-    movePointer (takeX point) (takeY point)
-    putChar (symbollToChar Player)
-
-display :: Map -> IO()
-display map = do
-    clearScreen
-    displayWalls (walls map)
-    displayPlayer (player map)
-    hFlush stdout
+updateMap :: Map -> Char -> Map
+updateMap map input = 
+    Map (walls map) 
+        (if (isValidPlayerPosition map newPlayerPosition) then
+            newPlayerPosition 
+        else 
+            (player map)) 
+    where 
+        direction = charToDirection input
+        newPlayerPosition = movePlayer direction (player map)

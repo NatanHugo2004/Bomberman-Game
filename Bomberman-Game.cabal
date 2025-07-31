@@ -25,7 +25,9 @@ source-repository head
 
 library
   exposed-modules:
+      Display
       GameLoop
+      Structures
       Walls
   other-modules:
       Paths_Bomberman_Game
