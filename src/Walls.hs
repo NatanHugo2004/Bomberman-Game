@@ -7,7 +7,7 @@ width = 18
 
 walls = [(x, y) | x <- [0..width], y <- [0, height]] ++ [(x, y) | x <- [0,width], y <- [1..height - 1]] ++ [(x, y) | x <- [2, 4..width - 2], y <- [2, 4..height - 2]]
 
-wallSymboll = "#"
+wallSymboll = "█"
 
 takeX :: (Int, Int) -> Int
 takeX (x, y) = x

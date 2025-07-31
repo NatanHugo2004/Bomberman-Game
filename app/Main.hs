@@ -3,6 +3,7 @@ module Main (main) where
 import Walls
 import Destructibles
 import Map
+import Menu
 
 main :: IO ()
 main = do

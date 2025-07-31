@@ -27,6 +27,7 @@ library
   exposed-modules:
       Destructibles
       Map
+      Menu
       Walls
   other-modules:
       Paths_Bomberman_Game
