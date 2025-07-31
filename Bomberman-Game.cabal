@@ -28,6 +28,7 @@ library
       Display
       GameLoop
       Map
+      Menu
       Structures
   other-modules:
       Paths_Bomberman_Game

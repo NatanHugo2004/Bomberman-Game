@@ -1,5 +1,7 @@
 module GameLoop where
 
+--TODO: VERIFICAR SE PRECISA MESMO IMPORTAR STRUCTURES
+
 import Structures
 import System.IO
 import Map 

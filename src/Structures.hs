@@ -4,6 +4,7 @@ newtype Point = Point (Int, Int) deriving (Eq)
 
 data Map = Map { 
         walls :: [Point],
+        boxes :: [Point],
         player :: Point
     }
 
