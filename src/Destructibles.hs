@@ -19,4 +19,4 @@ displayDestructibles (d:ds) = do
     setSGR [Reset]
 
 isDestructibles :: (Int, Int) -> Bool
-IsDestructibles pos = pos `elem` destructibles
+isDestructibles pos = pos `elem` destructibles
