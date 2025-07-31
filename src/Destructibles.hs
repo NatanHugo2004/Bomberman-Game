@@ -17,3 +17,6 @@ displayDestructibles (d:ds) = do
     putStr destructibleSymbol
     displayDestructibles ds
     setSGR [Reset]
+
+isDestructibles :: (Int, Int) -> Bool
+IsDestructibles pos = pos `elem` destructibles
