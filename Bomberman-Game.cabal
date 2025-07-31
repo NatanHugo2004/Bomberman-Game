@@ -27,8 +27,8 @@ library
   exposed-modules:
       Display
       GameLoop
+      Map
       Structures
-      Walls
   other-modules:
       Paths_Bomberman_Game
   autogen-modules:

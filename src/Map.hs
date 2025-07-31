@@ -1,4 +1,4 @@
-module Walls where
+module Map where
 
 import Structures 
 
