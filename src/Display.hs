@@ -9,7 +9,7 @@ data Symboll = Wall | Box | Player
 symbollToChar :: Symboll -> Char
 symbollToChar Wall   = '█'
 symbollToChar Box    = '▓'
-symbollToChar Player = '@'
+symbollToChar Player = '𖦔'
 
 movePointer :: Int -> Int -> IO()
 movePointer x y = setCursorPosition y x
