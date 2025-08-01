@@ -57,7 +57,7 @@ gameLoop map configs tempoRef = do
                     threadDelay 1300000
                     clearScreen
                     setCursorPosition ((height configs) `div` 2 - 2) 0
-                    putStr "IDIOT HAHAHA"
+                    putStr "YOU IDIOT"
                     let loopExclamacao :: Int -> IO ()
                         loopExclamacao 0 = putStrLn"\n"
                         loopExclamacao n = do
