@@ -30,6 +30,7 @@ main = do
         putStrLn "Not in the mood to play?"
         threadDelay 1000000
         putStrLn "Come back soon and have fun!!\n"
+        threadDelay 500000
         setSGR [Reset]
         showCursor
         exitSuccess
