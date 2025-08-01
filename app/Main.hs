@@ -46,3 +46,4 @@ startGame = do
     hSetEcho stdin False
     let initialMap = createMap (height gameConfigs) (width gameConfigs)
     gameLoop initialMap gameConfigs tempoRef
+
