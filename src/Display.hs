@@ -42,3 +42,5 @@ display map = do
     displayBoxes (boxes map)
     displayPlayer (player map)
     hFlush stdout
+
+
