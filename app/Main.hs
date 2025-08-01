@@ -47,4 +47,3 @@ startGame = do
     let initialMap = createMap (height gameConfigs) (width gameConfigs)
     gameLoop initialMap gameConfigs tempoRef
     
-
