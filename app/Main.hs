@@ -22,7 +22,17 @@ main = do
     setSGR [Reset]
     if escolha == "1" then
        startGame
-    else exitSuccess
+    else do
+        clearScreen
+        hideCursor
+        setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
+        setCursorPosition (9 `div` 2 - 2) 0
+        putStrLn "Not in the mood to play?"
+        threadDelay 1000000
+        putStrLn "Come back soon and have fun!!\n"
+        setSGR [Reset]
+        showCursor
+        exitSuccess
         
 
 startGame :: IO ()
