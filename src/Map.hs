@@ -2,13 +2,14 @@ module Map where
 
 import Structures 
 
--- TODO: VERIFICAR SE DÁ PRA FAZER ALGO MAIS BONITO
+
 charToDirection :: Char -> (Point -> Point)
 charToDirection 'a' = \p -> createPoint ((takeX p) - 1) (takeY p)
 charToDirection 'd' = \p -> createPoint ((takeX p) + 1) (takeY p)
 charToDirection 'w' = \p -> createPoint (takeX p) ((takeY p) - 1)
 charToDirection 's' = \p -> createPoint (takeX p) ((takeY p) + 1)
 charToDirection c = \p -> createPoint (takeX p) (takeY p)
+    
 
 movePlayer :: (Point -> Point) -> Point -> Point
 movePlayer direction player = direction player
@@ -32,20 +33,69 @@ isBox :: Point -> [Point] -> Bool
 isBox point boxes = point `elem` boxes
 
 createMap :: Int -> Int -> Map
-createMap height width = Map walls boxes player
+createMap height width = Map walls  boxes player []
     where
         walls = createWalls height width
         boxes = createBoxes height width walls
         player = createPoint 1 1
 
+-- Adiciona uma bomba na posição do jogador
+placeBomb :: Map -> Map
+placeBomb map = 
+    let newBomb = Bomb { bombPosition = player map, timer = 3}
+    in map { bombs = newBomb : bombs map}
+
+-- gera os pontos de explosão de uma bomba
+explosionPoints :: Bomb -> [Point]
+explosionPoints bomb =
+    let (Point(x, y)) = bombPosition bomb
+    in [Point(x, y), Point(x-1, y), Point(x+1, y), Point(x, y-1), Point(x, y+1)]
+
+processBombs :: Map -> Map
+processBombs currentMap =
+    let allBombs = bombs currentMap
+        bombsAfterTick = map (\b -> b { timer = timer b - 1}) allBombs
+        bombsToExplode = filter (\b -> timer b <= 0) bombsAfterTick
+        activeBombs = filter (\b -> timer b > 0) bombsAfterTick
+
+        --calculando todos os pontos de explosão
+        explodedPoints = concatMap explosionPoints bombsToExplode
+        -- Filtramos os blocos destrutíveis que não estão nos pontos de explosão
+        newBoxes = filter (\box -> not (box `elem` explodedPoints)) (boxes currentMap)
+        -- TODO: Adicionar lógica para o jogador ser atingido pela explosão
+    in currentMap {bombs = activeBombs, boxes = newBoxes}    
+
+
+-- A função principaç que lida com todas as entradasdo usuário
 updateMap :: Map -> Char -> Map
-updateMap map input = 
-    Map (walls map) 
-        (boxes map)
-        (if (isValidPlayerPosition map newPlayerPosition) then
-                newPlayerPosition 
-            else 
-                (player map)) 
-    where 
-        direction = charToDirection input
+updateMap map input =
+    case input of
+        ' ' -> placeBomb map
+        'q' -> map -- Saída
+        _   -> updateMapWithMovement map input
+
+-- Função auxiliar que processa a movimentação do jogador
+updateMapWithMovement :: Map -> Char -> Map
+updateMapWithMovement map input =
+    let direction = charToDirection input
         newPlayerPosition = movePlayer direction (player map)
+    in if isValidPlayerPosition map newPlayerPosition
+        then map { player = newPlayerPosition}    
+        else map 
+
+        
+
+--updateMap :: Map -> Char -> Map
+--updateMap map input = 
+  --  Map (walls map) 
+    --    (boxes map)
+      -- (if (isValidPlayerPosition map newPlayerPosition) then
+         --   newPlayerPosition 
+  --      else 
+        --    (player map)) 
+  --  where 
+    --    direction = charToDirection input
+      --  newPlayerPosition = movePlayer direction (player map)
+
+
+

@@ -1,23 +1,27 @@
 module GameLoop where
 
---TODO: VERIFICAR SE PRECISA MESMO IMPORTAR STRUCTURES
-
 import Structures
 import System.IO
 import Map 
 import Display
 
--- TODO: É INTERESSANTE FAZER A VERIFICAÇÃO SE RECEBEU UMA ENTRADA
--- VÁLIDA, CASO SIM, GERA UM MAPA NOVO, CASO NÃO REAPROVEITA O MESMO
--- MAPA
 
 gameLoop :: Map -> IO ()
 gameLoop map = do
-    display map
-    movePointer 0 10
+    -- A cada ciclo, processamos as bombas e criamos um novo mapa.
+    let mapWithProcessedBombs = processBombs map
+
+    -- Exibimos o mapa atualizado.
+    display mapWithProcessedBombs
     hFlush stdout
-    input <- getChar
-    let newMap = updateMap map input
-    if (input == 'q')
+    
+    -- Lemos a entrada se ela estiver pronta. 
+    input <- getChar 
+  
+
+    -- Se a entrada for 'q', o loop para. Caso contrário, ele continua.
+    if input == 'q'
         then return ()
-        else gameLoop newMap
+        else do 
+            let newMap = updateMap mapWithProcessedBombs input
+            gameLoop newMap
