@@ -1,30 +1,32 @@
 module Menu where
-
-{-
 import System.Console.ANSI
-import System.IO (stdout)
-import Display
+import System.IO (hFlush,stdout)
+import Structures
 
-retangulo = [(x, y) | x <- [0..width], y <- [0, height]] ++ [(x, y) | x <- [0,width], y <- [1..height - 1]]
+retangulo:: Int -> Int -> [Point]
+retangulo width height = [Point (x, y) | x <- [0..width], y <- [0, height]] ++ [Point (x, y) | x <- [0,width], y <- [1..height - 1]]
 
-verificaCaractere :: (Int,Int) -> String
-verificaCaractere (n,m)
+verificaCaractere :: Point -> Int -> Int-> String
+verificaCaractere (Point (n,m)) width height
  | n == 0 && m == 0 || n == 0 && m == height || n == width && m == 0 || n == width && m == height  = "+"
  | n == 0 || n == width   = "|"
  | m == 0 || m == height  = "-"
 
-displayRetangulo :: [(Int, Int)] -> IO()
-displayRetangulo []  = return ()
-displayRetangulo (h:hs) = do
-                        movePointer (takeX h) (takeY h) 
-                        putStr(verificaCaractere h)
-                        displayRetangulo hs
+displayRetangulo :: [Point] -> Int -> Int -> IO()
+displayRetangulo [] width height  = return ()
+displayRetangulo (h:hs) width height = do
+                        movePointer (takeX h) (takeY h)
+                        putStr(verificaCaractere h width height)
+                        displayRetangulo hs width height
 
-menu :: IO()
-menu = do
+movePointer:: Int -> Int-> IO()
+movePointer width height = setCursorPosition height width
+
+menu :: Int -> Int ->IO()
+menu width height = do
     clearScreen
     setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Red]
-    displayRetangulo retangulo
+    displayRetangulo (retangulo width height) width height
     movePointer ((width `div` 2) -4) 3
     setSGR [SetConsoleIntensity BoldIntensity, SetBlinkSpeed SlowBlink,SetColor Foreground Vivid Red]
     putStr("BOMBERMAN")
@@ -33,5 +35,4 @@ menu = do
     putStr("[1] JOGAR")
     movePointer ((width `div` 2) -4) 5
     putStr("[2] SAIR")
-    setSGR [SetConsoleIntensity BoldIntensity,SetColor Foreground Vivid Red]
--}
+    setSGR [SetConsoleIntensity BoldIntensity, SetBlinkSpeed NoBlink, SetColor Foreground Vivid Red]
