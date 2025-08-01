@@ -30,7 +30,6 @@ library
       Map
       Menu
       Structures
-      Timer
   other-modules:
       Paths_Bomberman_Game
   autogen-modules:

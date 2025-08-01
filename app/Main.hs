@@ -7,9 +7,6 @@ import Map
 import Menu
 import System.Exit
 import System.Console.ANSI
-import Timer
-import Data.IORef
-import Control.Concurrent (threadDelay)
 
 main :: IO ()
 main = do
@@ -23,17 +20,11 @@ main = do
     if escolha == "1" then
        startGame
     else exitSuccess
-        
 
 startGame :: IO ()
 startGame = do
-    hideCursor
-    tempoRef <- newIORef 5
-    let gameConfigs = GameConfigs 8 18
-    startTimer tempoRef
     hSetBuffering stdin NoBuffering
     hSetEcho stdin False
+    let gameConfigs = GameConfigs 8 18
     let initialMap = createMap (height gameConfigs) (width gameConfigs)
-    gameLoop initialMap gameConfigs tempoRef
-    
-
+    gameLoop initialMap
