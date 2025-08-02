@@ -18,7 +18,19 @@ gameLoop mapRef configs tempoRef = do
     tempo <- readIORef tempoRef
     setCursorPosition ((height configs) + 2) 0
     clearLine
-    putStr $ "Tempo restante: " ++ show tempo ++ "s  "
+    let total = 120
+    let filled = replicate (tempo * 13 `div` total) '■'
+    let empty = replicate (13 - length filled) ' '
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
+    putStr "══ Remaining Time ══\n"
+    setSGR [Reset]
+    putStr $ "│" ++ filled ++ empty ++ "│ "
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
+    putStr $ show tempo ++ "s "
+    setSGR [Reset]
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
+    putStr "\n════════════════════\n"
+    setSGR [Reset]
     hFlush stdout
 
     inputAvailable <- hReady stdin
