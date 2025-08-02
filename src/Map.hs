@@ -1,6 +1,8 @@
 module Map where
 
-import Structures 
+import Structures
+import System.Random.Shuffle
+import System.Random (StdGen) 
 
 -- TODO: VERIFICAR SE DÁ PRA FAZER ALGO MAIS BONITO
 charToDirection :: Char -> (Point -> Point)
@@ -58,18 +60,23 @@ isWall point walls = point `elem` walls
 isBomb:: Point -> [Bomb] -> Bool
 isBomb point bombs = point `elem` (map bombPosition bombs)
 
-createBoxes :: Int -> Int -> [Point] -> [Point]
-createBoxes height width walls = [createPoint x y | x <- [3,4..width - 3], y <- [1,2,height - 2, height - 1], not (isWall (createPoint x y) walls)] ++ 
-                                 [createPoint x y | x <- [1,2..width - 1], y <- [3,4..height - 3], not (isWall (createPoint x y) walls)]
+createBoxes :: Int -> Int -> [Point] -> Point -> StdGen -> [Point]
+createBoxes height width walls player gen = 
+  let
+    allPoints = [createPoint x y | x <- [1..width-1], y <- [1..height-1]]
+    validPoints = filter (\p -> not (p `elem` walls || p `elem` (neighbors player))) allPoints
+    shuffled = shuffle' validPoints (length validPoints) gen
+    boxesAmount = ceiling (0.70 * fromIntegral (length validPoints) :: Double)
+  in take boxesAmount shuffled
 
 isBox :: Point -> [Point] -> Bool
 isBox point boxes = point `elem` boxes
 
-createMap :: Int -> Int -> Map
-createMap height width = Map walls boxes player [] []
+createMap :: Int -> Int -> StdGen -> Map
+createMap height width gen = Map walls boxes player [] []
     where
         walls = createWalls height width
-        boxes = createBoxes height width walls
+        boxes = createBoxes height width walls player gen
         player = createPoint 1 1
 
 updateMap :: Map -> Char -> Map

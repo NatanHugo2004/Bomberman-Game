@@ -10,6 +10,7 @@ import System.Console.ANSI
 import Timer
 import Data.IORef
 import Control.Concurrent
+import System.Random
 
 main :: IO ()
 main = do
@@ -44,7 +45,8 @@ startGame = do
     startTimer tempoRef
     hSetBuffering stdin NoBuffering
     hSetEcho stdin False
-    initialMap <- newIORef (createMap (height gameConfigs) (width gameConfigs))
+    gen <- newStdGen
+    initialMap <- newIORef (createMap (height gameConfigs) (width gameConfigs) gen)
     _ <- forkIO $ updateBombTimers initialMap
     gameLoop initialMap gameConfigs tempoRef
     
