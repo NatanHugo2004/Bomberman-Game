@@ -28,9 +28,12 @@ updateBombTimers mapRef = do
             threadDelay 1000000
             mapa <- readIORef mapRef
             let bombasAtualizadas = map updateBomb (bombs mapa)
-            let (explodidas, ativas) = partition (\b -> timer b <= 0) bombasAtualizadas
-            let mapaExplodido = explodeBombs mapa explodidas
-            let novoMapa = mapaExplodido { bombs = ativas }
+            let explosionAtualizadas = map updateExplosion (explosions mapa)
+            let mapaComTimers = mapa { bombs = bombasAtualizadas, explosions = explosionAtualizadas }
+            let (explodidas, ativas) = partition (\b -> timer b <= 0) (bombs mapaComTimers)
+            let mapaExplodido = explodeBombs mapaComTimers explodidas
+            let explosionAtivas = filter (\e -> time e > 0) (explosions mapaExplodido)
+            let novoMapa = mapaExplodido { bombs = ativas, explosions = explosionAtivas }
             writeIORef mapRef novoMapa
             loop
     loop

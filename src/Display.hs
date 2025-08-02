@@ -11,6 +11,7 @@ symbollToChar Wall   = '█'
 symbollToChar Box    = '▓'
 symbollToChar Player = '𖦔'
 symbollToChar BombSymbol = 'δ'
+symbollToChar ExplosionSymbol = '𖤌'
 
 movePointer :: Int -> Int -> IO()
 movePointer x y = setCursorPosition y x
@@ -40,6 +41,23 @@ displayBombs (e:es) = do
     displayBombs es
     setSGR [Reset]
 
+
+
+displayExplosionPoints :: [Point] -> IO ()
+displayExplosionPoints [] = return ()
+displayExplosionPoints (j:js) = do
+    movePointer (takeX j) (takeY j)
+    setSGR[SetColor Foreground Vivid Red, SetConsoleIntensity BoldIntensity]
+    putChar(symbollToChar ExplosionSymbol)
+    setSGR[Reset]
+    displayExplosionPoints js
+
+displayExplosions :: [Explosion] -> IO()
+displayExplosions [] = return ()
+displayExplosions (t:ts) = do
+    displayExplosionPoints (explosionPosition t)
+
+
 displayPlayer :: Point -> IO()
 displayPlayer point = do
     movePointer (takeX point) (takeY point)
@@ -50,7 +68,8 @@ display map = do
     clearScreen
     displayWalls (walls map)
     displayBoxes (boxes map)
-    displayPlayer (player map)
     displayBombs (bombs map)
+    displayPlayer (player map)
+    displayExplosions (explosions map)
     hFlush stdout
 

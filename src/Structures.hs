@@ -2,6 +2,9 @@ module Structures where
 
 newtype Point = Point (Int, Int) deriving (Eq)
 
+data Explosion = Explosion {
+     explosionPosition :: [Point],
+     time :: Int}
 
 data Bomb = Bomb {
     bombPosition :: Point,
@@ -12,7 +15,8 @@ data Map = Map {
         walls :: [Point],
         boxes :: [Point],
         player :: Point,
-        bombs :: [Bomb]
+        bombs :: [Bomb],
+        explosions :: [Explosion]
     }
 
 data GameConfigs = GameConfigs {

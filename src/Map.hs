@@ -21,25 +21,28 @@ timer = timer}
 updateBomb:: Bomb -> Bomb
 updateBomb bomb = Bomb (bombPosition bomb) ((timer bomb) -1)
 
-activatedBomb:: Bomb -> Bool
-activatedBomb bomb = (timer bomb) > 0
-
 explodeBombs :: Map -> [Bomb] -> Map
 explodeBombs mapa [] = mapa
 explodeBombs mapa (b:bs) = explodeBombs mapaAtualizado bs
   where
     pos = bombPosition b
     raio = 1
-    pontosAfetados =
+    raioBomba =
         [createPoint (takeX pos + dx) (takeY pos + dy) |
             dx <- [-raio..raio],
             dy <- [-raio..raio],
             abs dx + abs dy <= raio]
-
+    
+    pontosAfetados = filter(`notElem` walls mapa) raioBomba
+    explosion = createExplosion (pontosAfetados)
     boxesRestantes = filter (`notElem` pontosAfetados) (boxes mapa)
-    mapaAtualizado = mapa { boxes = boxesRestantes }
+    mapaAtualizado = mapa { boxes = boxesRestantes, explosions = explosion: explosions mapa}
 
+createExplosion :: [Point] -> Explosion
+createExplosion points = Explosion (points) (1)
 
+updateExplosion :: Explosion -> Explosion
+updateExplosion explosion = Explosion (explosionPosition explosion) ((time explosion) -1)
 
 isValidPlayerPosition :: Map -> Point -> Bool
 isValidPlayerPosition map newPosition = not ((isWall newPosition (walls map)) || (isBox newPosition (boxes map)) || (isBomb newPosition (bombs map)) )
@@ -63,7 +66,7 @@ isBox :: Point -> [Point] -> Bool
 isBox point boxes = point `elem` boxes
 
 createMap :: Int -> Int -> Map
-createMap height width = Map walls boxes player []
+createMap height width = Map walls boxes player [] []
     where
         walls = createWalls height width
         boxes = createBoxes height width walls
@@ -75,6 +78,7 @@ updateMap mapa ' ' =
         (boxes mapa)
         (player mapa)
         (newBomb : bombs mapa)
+        (explosions mapa)
   where
     playerPosition = player mapa
     newBomb = plantBomb playerPosition 3
@@ -88,6 +92,7 @@ updateMap mapa input =
             else 
                 (player mapa)) 
        (bombs mapa)
+       (explosions mapa)
 
     where 
         direction = charToDirection input
