@@ -4,12 +4,13 @@ import Structures
 import System.Console.ANSI
 import System.IO
 
-data Symboll = Wall | Box | Player 
+data Symboll = Wall | Box | Player | BombSymbol 
 
 symbollToChar :: Symboll -> Char
 symbollToChar Wall   = '█'
 symbollToChar Box    = '▓'
 symbollToChar Player = '𖦔'
+symbollToChar BombSymbol = 'δ'
 
 movePointer :: Int -> Int -> IO()
 movePointer x y = setCursorPosition y x
@@ -30,6 +31,15 @@ displayBoxes (b:bs) = do
     displayBoxes bs
     setSGR [Reset]
 
+displayBombs :: [Bomb] -> IO()
+displayBombs [] = return ()
+displayBombs (e:es) = do
+    movePointer (takeX (bombPosition e)) (takeY (bombPosition e))
+    setSGR [SetConsoleIntensity BoldIntensity, SetBlinkSpeed SlowBlink, SetColor Foreground Vivid White]
+    putChar (symbollToChar BombSymbol)
+    displayBombs es
+    setSGR [Reset]
+
 displayPlayer :: Point -> IO()
 displayPlayer point = do
     movePointer (takeX point) (takeY point)
@@ -41,4 +51,5 @@ display map = do
     displayWalls (walls map)
     displayBoxes (boxes map)
     displayPlayer (player map)
+    displayBombs (bombs map)
     hFlush stdout

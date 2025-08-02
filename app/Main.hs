@@ -39,7 +39,7 @@ main = do
 startGame :: IO ()
 startGame = do
     hideCursor
-    tempoRef <- newIORef 5
+    tempoRef <- newIORef 120
     let gameConfigs = GameConfigs 8 18
     startTimer tempoRef
     hSetBuffering stdin NoBuffering
