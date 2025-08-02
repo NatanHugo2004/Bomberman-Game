@@ -8,7 +8,7 @@ data Symboll = Wall | Box | Player | BombSymbol | ExplosionSymbol
 
 symbollToChar :: Symboll -> Char
 symbollToChar Wall   = '█'
-symbollToChar Box    = '▓'
+symbollToChar Box    = '𖧭'
 symbollToChar Player = '𖦔'
 symbollToChar BombSymbol = 'δ'
 symbollToChar ExplosionSymbol = '𖤌'
