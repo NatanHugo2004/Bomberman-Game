@@ -18,6 +18,15 @@ plantBomb position timer = Bomb{
 bombPosition = position,
 timer = timer}
 
+updateBomb:: Bomb -> Bomb
+updateBomb bomb = Bomb (bombPosition bomb) ((timer bomb) -1)
+
+activatedBomb:: Bomb -> Bool
+activatedBomb bomb = (timer bomb) > 0
+
+
+
+
 isValidPlayerPosition :: Map -> Point -> Bool
 isValidPlayerPosition map newPosition = not ((isWall newPosition (walls map)) || (isBox newPosition (boxes map)) || (isBomb newPosition (bombs map)) )
 
@@ -47,24 +56,27 @@ createMap height width = Map walls boxes player []
         player = createPoint 1 1
 
 updateMap :: Map -> Char -> Map
-updateMap map ' ' =
-    Map (walls map)
-        (boxes map)
-        (player map)
-        (newBomb : bombs map)
+updateMap mapa ' ' =
+    Map (walls mapa)
+        (boxes mapa)
+        (player mapa)
+        (newBomb : bombs mapa)
   where
-    playerPosition = player map
+    playerPosition = player mapa
     newBomb = plantBomb playerPosition 3
         
 
-updateMap map input = 
-    Map (walls map) 
-        (boxes map)
-        (if (isValidPlayerPosition map newPlayerPosition) then
+updateMap mapa input = 
+    Map (walls mapa) 
+        (boxes mapa)
+        (if (isValidPlayerPosition mapa newPlayerPosition) then
                 newPlayerPosition 
             else 
-                (player map)) 
-        (bombs map)
+                (player mapa)) 
+       bombasAtualizadas
+
+
     where 
         direction = charToDirection input
-        newPlayerPosition = movePlayer direction (player map)
+        newPlayerPosition = movePlayer direction (player mapa)
+        bombasAtualizadas = filter activatedBomb(map updateBomb (bombs mapa))
