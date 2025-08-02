@@ -2,14 +2,14 @@ module Main (main) where
 
 import System.IO
 import Structures
-import GameLoop
+import GameLoop 
 import Map
 import Menu
 import System.Exit
 import System.Console.ANSI
 import Timer
 import Data.IORef
-import Control.Concurrent (threadDelay)
+import Control.Concurrent
 
 main :: IO ()
 main = do
@@ -44,6 +44,7 @@ startGame = do
     startTimer tempoRef
     hSetBuffering stdin NoBuffering
     hSetEcho stdin False
-    let initialMap = createMap (height gameConfigs) (width gameConfigs)
+    initialMap <- newIORef (createMap (height gameConfigs) (width gameConfigs))
+    _ <- forkIO $ updateBombTimers initialMap
     gameLoop initialMap gameConfigs tempoRef
     

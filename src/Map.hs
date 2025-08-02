@@ -63,7 +63,7 @@ updateMap mapa ' ' =
         (newBomb : bombs mapa)
   where
     playerPosition = player mapa
-    newBomb = plantBomb playerPosition 3
+    newBomb = plantBomb playerPosition 5
         
 
 updateMap mapa input = 
@@ -73,10 +73,8 @@ updateMap mapa input =
                 newPlayerPosition 
             else 
                 (player mapa)) 
-       bombasAtualizadas
-
+       (bombs mapa)
 
     where 
         direction = charToDirection input
         newPlayerPosition = movePlayer direction (player mapa)
-        bombasAtualizadas = filter activatedBomb(map updateBomb (bombs mapa))

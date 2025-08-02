@@ -1,4 +1,4 @@
-module GameLoop (gameLoop) where
+module GameLoop where
 
 import Structures
 import System.IO
@@ -8,10 +8,12 @@ import Data.IORef
 import System.Console.ANSI
 import Control.Concurrent
 
-gameLoop :: Map -> GameConfigs -> IORef Int -> IO ()
-gameLoop map configs tempoRef = do
+
+gameLoop :: IORef Map -> GameConfigs -> IORef Int -> IO ()
+gameLoop mapRef configs tempoRef = do
     clearScreen
-    display map
+    mapa <- readIORef mapRef
+    display mapa
 
     tempo <- readIORef tempoRef
     setCursorPosition ((height configs) + 2) 0
@@ -40,7 +42,9 @@ gameLoop map configs tempoRef = do
             setSGR [Reset]
             showCursor
         else do
-            let newMap = updateMap map input
+            let newMapaPure = updateMap mapa input
+            writeIORef mapRef newMapaPure
+
             if tempo < 0
                 then do
                     setCursorPosition ((height configs) + 2) 0
@@ -57,7 +61,7 @@ gameLoop map configs tempoRef = do
                     threadDelay 1300000
                     clearScreen
                     setCursorPosition ((height configs) `div` 2 - 2) 0
-                    putStr "YOU IDIOT"
+                    putStr "IDIOT HAHAHA"
                     let loopExclamacao :: Int -> IO ()
                         loopExclamacao 0 = putStrLn"\n"
                         loopExclamacao n = do
@@ -68,7 +72,7 @@ gameLoop map configs tempoRef = do
                     loopExclamacao 8  
                     setSGR [Reset]
                     showCursor
-                else gameLoop newMap configs tempoRef
+                else gameLoop mapRef configs tempoRef
     else do
         threadDelay 100000 
         updatedTime <- readIORef tempoRef
@@ -99,4 +103,4 @@ gameLoop map configs tempoRef = do
                 loopExclamacao 8  
                 setSGR [Reset]
                 showCursor
-            else gameLoop map configs tempoRef
+            else gameLoop mapRef configs tempoRef
