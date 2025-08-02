@@ -4,7 +4,7 @@ import Structures
 import System.Console.ANSI
 import System.IO
 
-data Symboll = Wall | Box | Player | BombSymbol 
+data Symboll = Wall | Box | Player | BombSymbol | ExplosionSymbol
 
 symbollToChar :: Symboll -> Char
 symbollToChar Wall   = '█'
@@ -53,3 +53,4 @@ display map = do
     displayPlayer (player map)
     displayBombs (bombs map)
     hFlush stdout
+

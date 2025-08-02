@@ -24,6 +24,20 @@ updateBomb bomb = Bomb (bombPosition bomb) ((timer bomb) -1)
 activatedBomb:: Bomb -> Bool
 activatedBomb bomb = (timer bomb) > 0
 
+explodeBombs :: Map -> [Bomb] -> Map
+explodeBombs mapa [] = mapa
+explodeBombs mapa (b:bs) = explodeBombs mapaAtualizado bs
+  where
+    pos = bombPosition b
+    raio = 1
+    pontosAfetados =
+        [createPoint (takeX pos + dx) (takeY pos + dy) |
+            dx <- [-raio..raio],
+            dy <- [-raio..raio],
+            abs dx + abs dy <= raio]
+
+    boxesRestantes = filter (`notElem` pontosAfetados) (boxes mapa)
+    mapaAtualizado = mapa { boxes = boxesRestantes }
 
 
 
@@ -63,7 +77,7 @@ updateMap mapa ' ' =
         (newBomb : bombs mapa)
   where
     playerPosition = player mapa
-    newBomb = plantBomb playerPosition 5
+    newBomb = plantBomb playerPosition 3
         
 
 updateMap mapa input = 

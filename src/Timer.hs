@@ -5,6 +5,7 @@ import Data.IORef
 import Control.Monad
 import Map
 import Structures
+import Data.List
 
 startTimer :: IORef Int -> IO ()
 startTimer tempoRef = do
@@ -27,8 +28,9 @@ updateBombTimers mapRef = do
             threadDelay 1000000
             mapa <- readIORef mapRef
             let bombasAtualizadas = map updateBomb (bombs mapa)
-                bombasAtivas = filter activatedBomb bombasAtualizadas
-                novoMapa = mapa { bombs = bombasAtivas }
+            let (explodidas, ativas) = partition (\b -> timer b <= 0) bombasAtualizadas
+            let mapaExplodido = explodeBombs mapa explodidas
+            let novoMapa = mapaExplodido { bombs = ativas }
             writeIORef mapRef novoMapa
             loop
     loop
