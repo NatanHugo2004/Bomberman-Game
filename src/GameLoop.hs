@@ -42,8 +42,8 @@ gameLoop mapRef configs tempoRef = do
             setSGR [Reset]
             showCursor
         else do
-            let newMapaPure = updateMap mapa input
-            writeIORef mapRef newMapaPure
+            let newMap = updateMap mapa input
+            writeIORef mapRef newMap
 
             if tempo < 0
                 then do
