@@ -1,7 +1,9 @@
 module Menu where
 import System.Console.ANSI
 import System.IO (hFlush,stdout)
+import System.Exit
 import Structures
+import Control.Concurrent
 
 retangulo:: Int -> Int -> [Point]
 retangulo width height = [Point (x, y) | x <- [0..width], y <- [0, height]] ++ [Point (x, y) | x <- [0,width], y <- [1..height - 1]]
@@ -36,3 +38,20 @@ menu width height = do
     movePointer ((width `div` 2) -4) 5
     putStr("[2] SAIR")
     setSGR [SetConsoleIntensity BoldIntensity, SetBlinkSpeed NoBlink, SetColor Foreground Vivid Red]
+    movePointer 5 10
+    putStr "ESCOLHA:"
+    movePointer 9 11
+
+menuExit :: Int -> IO()
+menuExit height = do 
+	clearScreen
+	hideCursor
+	setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
+	setCursorPosition (height `div` 2 - 2) 0
+	putStrLn "Not in the mood to play?"
+	threadDelay 1000000
+	putStrLn "Come back soon and have fun!!\n"
+	threadDelay 500000
+	setSGR [Reset]
+	showCursor
+	exitSuccess

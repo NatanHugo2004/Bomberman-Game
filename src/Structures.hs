@@ -21,7 +21,8 @@ data Map = Map {
 
 data GameConfigs = GameConfigs {
         height :: Int,
-        width :: Int
+        width :: Int,
+	timerGamer :: Int
     }
 
 createPoint :: Int -> Int -> Point
