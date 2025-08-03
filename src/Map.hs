@@ -46,6 +46,15 @@ createExplosion points = Explosion (points) (1)
 updateExplosion :: Explosion -> Explosion
 updateExplosion explosion = Explosion (explosionPosition explosion) ((time explosion) -1)
 
+
+getExplosionsPoints :: [Explosion] -> [Point] -> [Point]
+getExplosionsPoints [] points = points
+getExplosionsPoints (j:js) points = getExplosionsPoints js (points ++ (explosionPosition j))
+
+
+isDead :: Point -> [Explosion] -> Bool
+isDead playerPosition explosions = playerPosition `elem` (getExplosionsPoints explosions []) 
+
 isValidPlayerPosition :: Map -> Point -> Bool
 isValidPlayerPosition map newPosition = not ((isWall newPosition (walls map)) || (isBox newPosition (boxes map)) || (isBomb newPosition (bombs map)) )
 

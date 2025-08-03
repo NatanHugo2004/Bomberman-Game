@@ -27,17 +27,17 @@ movePointer width height = setCursorPosition height width
 menu :: Int -> Int ->IO()
 menu width height = do
     clearScreen
-    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Red]
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid White]
     displayRetangulo (retangulo width height) width height
     movePointer ((width `div` 2) -4) 3
-    setSGR [SetConsoleIntensity BoldIntensity, SetBlinkSpeed SlowBlink,SetColor Foreground Vivid Red]
+    setSGR [SetConsoleIntensity BoldIntensity, SetBlinkSpeed SlowBlink,SetColor Foreground Vivid White]
     putStr("BOMBERMAN")
-    setSGR [SetConsoleIntensity NormalIntensity, SetBlinkSpeed NoBlink, SetColor Foreground Vivid Red]
+    setSGR [SetConsoleIntensity NormalIntensity, SetBlinkSpeed NoBlink, SetColor Foreground Vivid White]
     movePointer ((width `div` 2) - 4) 4
     putStr("[1] JOGAR")
     movePointer ((width `div` 2) -4) 5
     putStr("[2] SAIR")
-    setSGR [SetConsoleIntensity BoldIntensity, SetBlinkSpeed NoBlink, SetColor Foreground Vivid Red]
+    setSGR [SetConsoleIntensity BoldIntensity, SetBlinkSpeed NoBlink, SetColor Foreground Vivid White]
     movePointer 5 10
     putStr "ESCOLHA:"
     movePointer 9 11

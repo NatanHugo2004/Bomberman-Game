@@ -15,6 +15,7 @@ gameLoop mapRef configs tempoRef = do
     mapa <- readIORef mapRef
     display mapa
 
+
     tempo <- readIORef tempoRef
     setCursorPosition ((height configs) + 2) 0
     clearLine
@@ -56,7 +57,6 @@ gameLoop mapRef configs tempoRef = do
         else do
             let newMap = updateMap mapa input
             writeIORef mapRef newMap
-
             if tempo < 0
                 then do
                     setCursorPosition ((height configs) + 2) 0
@@ -86,9 +86,11 @@ gameLoop mapRef configs tempoRef = do
                     showCursor
                 else gameLoop mapRef configs tempoRef
     else do
-        threadDelay 100000 
+        if( isDead (player mapa) (explosions mapa)) then displayPlayerDeath (player mapa) 
+        else return ()
+        threadDelay 300000 
         updatedTime <- readIORef tempoRef
-        if updatedTime <= 0
+        if updatedTime <= 0 || isDead (player mapa) (explosions mapa)
             then do
                 setCursorPosition ((height configs) + 2) 0
                 clearLine
