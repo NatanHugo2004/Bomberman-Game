@@ -1,47 +1,33 @@
 module Main (main) where
 
 import System.IO
+import System.Random
+import System.Exit
+import System.Console.ANSI
 import Structures
 import GameLoop 
 import Map
 import Menu
-import System.Exit
-import System.Console.ANSI
 import Timer
 import Data.IORef
 import Control.Concurrent
-import System.Random
 
 main :: IO ()
 main = do
-    menu 18 9
-    movePointer 5 10
-    putStr "ESCOLHA:"
-    movePointer 9 11
+    let gameConfigs = GameConfigs 8 18 120
+    menu (width gameConfigs) ((height gameConfigs) + 1)
     hFlush stdout
     escolha <- getLine
     setSGR [Reset]
     if escolha == "1" then
-       startGame
+        startGame gameConfigs
     else do
-        clearScreen
-        hideCursor
-        setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
-        setCursorPosition (9 `div` 2 - 2) 0
-        putStrLn "Not in the mood to play?"
-        threadDelay 1000000
-        putStrLn "Come back soon and have fun!!\n"
-        threadDelay 500000
-        setSGR [Reset]
-        showCursor
-        exitSuccess
-        
+        menuExit ((height gameConfigs) + 1)
 
-startGame :: IO ()
-startGame = do
+startGame :: GameConfigs -> IO ()
+startGame gameConfigs = do
     hideCursor
-    tempoRef <- newIORef 120
-    let gameConfigs = GameConfigs 8 18
+    tempoRef <- newIORef (timerGamer gameConfigs) 
     startTimer tempoRef
     hSetBuffering stdin NoBuffering
     hSetEcho stdin False
