@@ -30,41 +30,18 @@ displayPoints (p:ps) symboll sgr = do
     displayPoint p symboll sgr
     displayPoints ps symboll sgr
 
-displayPlayerDeath :: Point -> IO()
-displayPlayerDeath player = do 
-    movePointer (takeX player) (takeY player)
-    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid White]
-    putChar (symbollToChar S_playerDeath)
-    setSGR [Reset]
-
-displayBombs :: [Bomb] -> IO()
-displayBombs [] = do
-    setSGR [Reset]
-    return ()
-displayBombs (e:es) = do
-    displayPoint (bombPosition e) S_bomb sgrBomb
-    displayBombs es
-    where
-        sgrBomb = [SetConsoleIntensity BoldIntensity, SetBlinkSpeed SlowBlink, SetColor Foreground Vivid White]
-
-displayExplosions :: [Explosion] -> IO()
-displayExplosions [] = return ()
-displayExplosions (e:es) = do
-    displayPoints (explosionPosition e) S_explosion sgrExplosion  
-    displayExplosions es
-    where
-        sgrExplosion = [SetColor Foreground Vivid Red, SetConsoleIntensity BoldIntensity]
-
 display :: Map -> IO()
 display map = do
     clearScreen
     displayPoints (walls map) S_wall [Reset]
     displayPoints (boxes map) S_box sgrBox
-    displayBombs (bombs map)
-    displayExplosions (explosions map)
-    displayPoint (player map) S_player [Reset] 
+    displayPoints (allBombsPoints (bombs map)) S_bomb sgrBomb 
+    displayPoints (allExplosionsPoints (explosions map)) S_explosion sgrExplosion
+    displayPoint  (player map) S_player [Reset] 
     hFlush stdout
     where
         sgrBox = [SetColor Foreground Dull Yellow]
+        sgrBomb = [SetConsoleIntensity BoldIntensity, SetBlinkSpeed SlowBlink, SetColor Foreground Vivid White]
+        sgrExplosion = [SetColor Foreground Vivid Red, SetConsoleIntensity BoldIntensity]
 
 
