@@ -86,7 +86,8 @@ gameLoop mapRef configs tempoRef = do
                     showCursor
                 else gameLoop mapRef configs tempoRef
     else do
-        if( isDead (player mapa) (explosions mapa)) then displayPlayerDeath (player mapa) 
+        if( isDead (player mapa) (explosions mapa)) then 
+            displayPoint (player mapa) S_playerDeath sgrPlayerDeath 
         else return ()
         threadDelay 300000 
         updatedTime <- readIORef tempoRef
@@ -118,3 +119,5 @@ gameLoop mapRef configs tempoRef = do
                 setSGR [Reset]
                 showCursor
             else gameLoop mapRef configs tempoRef
+    where
+        sgrPlayerDeath = [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid White]
