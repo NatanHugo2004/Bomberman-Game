@@ -11,6 +11,12 @@ data Bomb = Bomb {
     timer :: Int 
 }
 
+allBombsPoints :: [Bomb] -> [Point]
+allBombsPoints bombs = [(bombPosition b) | b <- bombs] 
+
+allExplosionsPoints :: [Explosion] -> [Point]
+allExplosionsPoints explosions = [e | explosion <- explosions, e <- (explosionPosition explosion)] 
+
 data Map = Map { 
         walls :: [Point],
         boxes :: [Point],
