@@ -25,9 +25,6 @@ createWalls height width =  [createPoint x y | x <- [0..width], y <- [0, height]
                             [createPoint x y | x <- [0,width], y <- [1..height - 1]] ++ 
                             [createPoint x y | x <- [2, 4..width - 2], y <- [2, 4..height - 2]]
 
-isWall :: Point -> [Point] -> Bool
-isWall point walls = point `elem` walls
-
 createBoxes :: Int -> Int -> [Point] -> Point -> StdGen -> [Point]
 createBoxes height width walls player gen = take boxesAmount shuffled
     where
@@ -36,9 +33,6 @@ createBoxes height width walls player gen = take boxesAmount shuffled
         validPoints  = filter isValidPoint allPoints
         shuffled     = shuffle' validPoints (length validPoints) gen
         boxesAmount  = ceiling (0.70 * fromIntegral (length validPoints) :: Double)
-
-isBox :: Point -> [Point] -> Bool
-isBox point boxes = point `elem` boxes
 
 createMap :: Int -> Int -> StdGen -> Map
 createMap height width gen = Map walls boxes player [] []
@@ -58,3 +52,14 @@ updateMap map input
         direction    = charToDirection input
         newPlayerPos = direction playerPos
 
+isIn :: Eq a => a -> [a] -> Bool
+isIn = elem
+
+isWall :: Point -> [Point] -> Bool
+isWall = isIn
+
+isBox :: Point -> [Point] -> Bool
+isBox = isIn
+
+isBomb:: Point -> [Bomb] -> Bool
+isBomb point bombs = isIn point (map bombPosition bombs)

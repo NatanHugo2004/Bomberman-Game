@@ -41,5 +41,3 @@ getExplosionsPoints (j:js) points = getExplosionsPoints js (points ++ (explosion
 isDead :: Point -> [Explosion] -> Bool
 isDead playerPosition explosions = playerPosition `elem` (getExplosionsPoints explosions []) 
 
-isBomb:: Point -> [Bomb] -> Bool
-isBomb point bombs = point `elem` (map bombPosition bombs)
