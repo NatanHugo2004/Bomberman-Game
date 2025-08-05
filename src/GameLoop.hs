@@ -5,6 +5,7 @@ import System.IO
 import Map 
 import Display
 import Data.IORef
+import Bomb
 import System.Console.ANSI
 import Control.Concurrent
 

@@ -2,7 +2,6 @@ module Main (main) where
 
 import System.IO
 import System.Random
-import System.Exit
 import System.Console.ANSI
 import Structures
 import GameLoop 

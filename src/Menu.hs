@@ -1,28 +1,31 @@
 module Menu where
+
+import Utils
+import Structures
+import Display
+import Control.Concurrent
 import System.Console.ANSI
 import System.IO (hFlush,stdout)
 import System.Exit
-import Structures
-import Control.Concurrent
 
 retangulo:: Int -> Int -> [Point]
 retangulo width height = [Point (x, y) | x <- [0..width], y <- [0, height]] ++ [Point (x, y) | x <- [0,width], y <- [1..height - 1]]
 
 verificaCaractere :: Point -> Int -> Int-> String
-verificaCaractere (Point (n,m)) width height
- | n == 0 && m == 0 || n == 0 && m == height || n == width && m == 0 || n == width && m == height  = "+"
- | n == 0 || n == width   = "|"
- | m == 0 || m == height  = "-"
+verificaCaractere (Point (x,y)) width height
+ | (x, y) `elem` corners = "+"
+ | x == 0 || x == width  = "|"
+ | y == 0 || y == height = "-"
+ | otherwise             = ""
+ where
+    corners = [(0, 0), (0, height), (width, 0), (width, height)] 
 
 displayRetangulo :: [Point] -> Int -> Int -> IO()
 displayRetangulo [] width height  = return ()
 displayRetangulo (h:hs) width height = do
-                        movePointer (takeX h) (takeY h)
-                        putStr(verificaCaractere h width height)
-                        displayRetangulo hs width height
-
-movePointer:: Int -> Int-> IO()
-movePointer width height = setCursorPosition height width
+    movePointer (takeX h) (takeY h)
+    putStr(verificaCaractere h width height)
+    displayRetangulo hs width height
 
 menu :: Int -> Int ->IO()
 menu width height = do
