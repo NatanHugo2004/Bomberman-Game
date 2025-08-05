@@ -28,6 +28,7 @@ createWalls height width =  [createPoint x y | x <- [0..width], y <- [0, height]
 isWall :: Point -> [Point] -> Bool
 isWall point walls = point `elem` walls
 
+{-
 createBoxes :: Int -> Int -> [Point] -> Point -> StdGen -> [Point]
 createBoxes height width walls player gen = 
   let
@@ -36,6 +37,17 @@ createBoxes height width walls player gen =
     shuffled = shuffle' validPoints (length validPoints) gen
     boxesAmount = ceiling (0.70 * fromIntegral (length validPoints) :: Double)
   in take boxesAmount shuffled
+-}
+
+createBoxes :: Int -> Int -> [Point] -> Point -> StdGen -> [Point]
+createBoxes height width walls player gen = take boxesAmount shuffled
+    where
+        allPoints = [createPoint x y | x <- [1..width-1], y <- [1..height-1]]
+        validPoints = filter (\p -> not (p `elem` walls ||
+                                         p `elem` (neighbors player))) 
+                             allPoints
+        shuffled = shuffle' validPoints (length validPoints) gen
+        boxesAmount = ceiling (0.70 * fromIntegral (length validPoints) :: Double)
 
 isBox :: Point -> [Point] -> Bool
 isBox point boxes = point `elem` boxes
