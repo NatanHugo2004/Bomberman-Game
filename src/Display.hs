@@ -1,6 +1,7 @@
 module Display where
 
 import Structures
+import Utils
 import System.Console.ANSI
 import System.IO
 

@@ -1,6 +1,7 @@
 module Bomb where
 
 import Structures
+import Utils
 
 plantBomb:: Point -> Int -> Bomb
 plantBomb position timer = Bomb {bombPosition = position,

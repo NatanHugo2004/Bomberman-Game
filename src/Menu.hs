@@ -1,9 +1,11 @@
 module Menu where
+
+import Utils
+import Structures
+import Control.Concurrent
 import System.Console.ANSI
 import System.IO (hFlush,stdout)
 import System.Exit
-import Structures
-import Control.Concurrent
 
 retangulo:: Int -> Int -> [Point]
 retangulo width height = [Point (x, y) | x <- [0..width], y <- [0, height]] ++ [Point (x, y) | x <- [0,width], y <- [1..height - 1]]
