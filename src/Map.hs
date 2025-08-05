@@ -32,7 +32,7 @@ createBoxes :: Int -> Int -> [Point] -> Point -> StdGen -> [Point]
 createBoxes height width walls player gen = take boxesAmount shuffled
     where
         allPoints    = [createPoint x y | x <- [1..width-1], y <- [1..height-1]]
-        isValidPoint = \p -> not (p `elem` wall || p `elem` (neighbors player))
+        isValidPoint = \p -> not (p `elem` walls || p `elem` (neighbors player))
         validPoints  = filter isValidPoint allPoints
         shuffled     = shuffle' validPoints (length validPoints) gen
         boxesAmount  = ceiling (0.70 * fromIntegral (length validPoints) :: Double)
