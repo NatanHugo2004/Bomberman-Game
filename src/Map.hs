@@ -4,13 +4,15 @@ import Structures
 import System.Random.Shuffle
 import System.Random (StdGen) 
 
--- TODO: VERIFICAR SE DÁ PRA FAZER ALGO MAIS BONITO
 charToDirection :: Char -> (Point -> Point)
-charToDirection 'a' = \p -> createPoint ((takeX p) - 1) (takeY p)
-charToDirection 'd' = \p -> createPoint ((takeX p) + 1) (takeY p)
-charToDirection 'w' = \p -> createPoint (takeX p) ((takeY p) - 1)
-charToDirection 's' = \p -> createPoint (takeX p) ((takeY p) + 1)
-charToDirection c = \p -> createPoint (takeX p) (takeY p)
+charToDirection c = case c of
+'a' -> move (-1) 0
+'d' -> move 1    0
+'w' -> move 0    (-1)
+'s' -> move 0    1
+_   -> id
+    where
+        move x y = \p -> createPoint ((takeX p) + x) ((takeY p) + y)
 
 movePlayer :: (Point -> Point) -> Point -> Point
 movePlayer direction player = direction player
