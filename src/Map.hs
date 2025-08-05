@@ -1,9 +1,10 @@
 module Map where
 
 import Structures
+import Utils
+import Bomb
 import System.Random.Shuffle
 import System.Random (StdGen) 
-import Bomb
 
 charToDirection :: Char -> (Point -> Point)
 charToDirection c = case c of
