@@ -21,9 +21,9 @@ isValidPlayerPos map newPosition = not ((isWall newPosition (walls map)) ||
                                         (isBomb newPosition (bombs map)))
 
 createWalls :: Int -> Int -> [Point]
-createWalls height width =  [createPoint x y | x <- [0..width], y <- [0, height]] ++ 
-                            [createPoint x y | x <- [0,width], y <- [1..height - 1]] ++ 
-                            [createPoint x y | x <- [2, 4..width - 2], y <- [2, 4..height - 2]]
+createWalls height width = [createPoint x y | x <- [0..width], y <- [0, height]] ++ 
+                           [createPoint x y | x <- [0,width], y <- [1..height - 1]] ++ 
+                           [createPoint x y | x <- [2, 4..width - 2], y <- [2, 4..height - 2]]
 
 createBoxes :: Int -> Int -> [Point] -> Point -> StdGen -> [Point]
 createBoxes height width walls player gen = take boxesAmount shuffled
@@ -37,8 +37,8 @@ createBoxes height width walls player gen = take boxesAmount shuffled
 createMap :: Int -> Int -> StdGen -> Map
 createMap height width gen = Map walls boxes player [] []
     where
-        walls = createWalls height width
-        boxes = createBoxes height width walls player gen
+        walls  = createWalls height width
+        boxes  = createBoxes height width walls player gen
         player = createPoint 1 1
 
 updateMap :: Map -> Char -> Map
