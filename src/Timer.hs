@@ -4,6 +4,7 @@ import Control.Concurrent
 import Data.IORef
 import Control.Monad
 import Map
+import Bomb
 import Structures
 import Data.List
 
