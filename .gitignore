@@ -1,3 +1,4 @@
 .stack-work/
-.Bomberman-Game.cabal
+stack.yaml.lock
+Bomberman-Game.cabal
 *.swp
