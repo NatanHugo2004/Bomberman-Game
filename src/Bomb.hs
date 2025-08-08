@@ -12,7 +12,9 @@ plantBomb position timer = Bomb {bombPosition = position,
                                 }
 
 addBomb :: Bomb -> [Bomb] -> [Bomb]
-addBomb newBomb bombs = newBomb : bombs
+addBomb newBomb bombs
+    | length bombs < 3 = newBomb : bombs  
+    | otherwise        = bombs
 
 updateBomb:: Bomb -> Bomb
 updateBomb bomb = Bomb (bombPosition bomb) ((timer bomb) -1)
