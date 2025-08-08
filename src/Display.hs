@@ -9,7 +9,7 @@ data Symboll = S_wall | S_box | S_player | S_bomb | S_explosion | S_playerDeath
 
 symbollToChar :: Symboll -> Char
 symbollToChar S_wall        = '█'
-symbollToChar S_box         = '𖧭'
+symbollToChar S_box         = '▓'
 symbollToChar S_player      = '𖦔'
 symbollToChar S_bomb        = 'δ'
 symbollToChar S_explosion   = '𖤌'
