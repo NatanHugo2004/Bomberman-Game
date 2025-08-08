@@ -1,12 +1,16 @@
+--Modulo responsável por todas as operações relacionadas a estrutura bomba e explosões, estruturas essas definidas no modulo structure.
 module Bomb where
 
 import Structures
 import Utils
 
+
+--Função responsável por plantar bombas em uma determinada posição. Recebe um ponto e um inteiro, representando o local que a bomba será plantada, e o tempo de explosão e retornando uma bomba.
 plantBomb:: Point -> Int -> Bomb
 plantBomb position timer = Bomb {bombPosition = position,
                                  timer = timer
                                 }
+
 addBomb :: Bomb -> [Bomb] -> [Bomb]
 addBomb newBomb bombs = newBomb : bombs
 
