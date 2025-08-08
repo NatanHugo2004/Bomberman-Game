@@ -36,22 +36,51 @@ createBoxes height width walls player gen = take boxesAmount shuffled
         boxesAmount  = ceiling (0.70 * fromIntegral (length validPoints) :: Double)
 
 createMap :: Int -> Int -> StdGen -> Map
-createMap height width gen = Map walls boxes player [] []
-    where
-        walls  = createWalls height width
-        boxes  = createBoxes height width walls player gen
-        player = createPoint 1 1
+createMap height width gen = Map walls boxes player [] [] door (Just keyPosition)  False
+  where
+    walls       = createWalls height width
+    player      = createPoint 1 1
+    door        = createPoint (width - 1) (height - 1) 
+    keyPosition = createKeyPosition height width walls player gen
+    boxes       = createBoxes height width walls player gen
+
+createKeyPosition :: Int -> Int -> [Point] -> Point -> StdGen -> Point
+createKeyPosition height width walls player gen = head $ shuffle' validPoints (length validPoints) gen
+  where
+    -- Pega todos os pontos válidos na parte oposta do mapa (longe do jogador)
+    allPoints = [createPoint x y | x <- [width `div` 2..width-1], y <- [height `div` 2..height-1]]
+    -- Um ponto é válido se não for uma parede e não for o ponto inicial do jogador
+    isValidPoint p = not (p `elem` walls || p `elem` (neighbors player))
+    validPoints  = filter isValidPoint allPoints   
+
+collectKey :: Map -> Point -> Map
+collectKey mapa newPlayerPos = 
+  case key mapa of
+    Just k -> 
+      if newPlayerPos == k
+        then mapa { player = newPlayerPos, hasKey = True, key = Nothing }
+        else mapa { player = newPlayerPos }
+    Nothing -> mapa { player = newPlayerPos }  
+
+-- Função que verifica se o jogador está na porta e já tem a chave
+canExitThroughDoor :: Map -> Point -> Bool
+canExitThroughDoor mapa newPlayerPos =
+  newPlayerPos == door mapa && hasKey mapa
 
 updateMap :: Map -> Char -> Map
-updateMap map input
- | input == ' '                      = map {bombs = addBomb newBomb (bombs map)}
- | isValidPlayerPos map newPlayerPos = map {player = newPlayerPos}
- | otherwise                         = map
-    where
-        playerPos    = player map
-        newBomb      = plantBomb playerPos 3
-        direction    = charToDirection input
-        newPlayerPos = direction playerPos
+updateMap mapa input
+  | input == ' ' = mapa {bombs = addBomb newBomb (bombs mapa)}
+  | otherwise    =
+    let
+      playerPos    = player mapa
+      direction    = charToDirection input
+      newPlayerPos = direction playerPos
+    in
+      if isValidPlayerPos mapa newPlayerPos
+        then collectKey mapa newPlayerPos
+        else mapa
+  where
+    newBomb = plantBomb (player mapa) 3
 
 isIn :: Eq a => a -> [a] -> Bool
 isIn = elem
