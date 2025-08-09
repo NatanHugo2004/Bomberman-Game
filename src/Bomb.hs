@@ -7,9 +7,8 @@ import Utils
 
 --Função responsável por plantar bombas em uma determinada posição. Recebe um ponto e um inteiro, representando o local que a bomba será plantada, e o tempo de explosão e retornando uma bomba.
 plantBomb:: Point -> Int -> Bomb
-plantBomb position timer = Bomb {bombPosition = position,
-                                 timer = timer
-                                }
+plantBomb position timer = Bomb { bombPosition = position,
+                                  timer        = timer }
 
 --Função que adiciona uma bomba em uma lista de bombas, recebendo uma bomba, uma lista de bombas, e retornando uma nova lista de bombas, feita a partir da lista de bombas recebidas + a bomba passada como parâmetro. A bomba só será adicionada caso a lista tenha menos que 3 bombas.
 addBomb :: Bomb -> [Bomb] -> [Bomb]
@@ -28,11 +27,9 @@ explodeBombs mapa (b:bs) = explodeBombs mapaAtualizado bs
   where
     pos = bombPosition b
     raio = 1
-    raioBomba =
-        [createPoint (takeX pos + dx) (takeY pos + dy) |
-            dx <- [-raio..raio],
-            dy <- [-raio..raio],
-            abs dx + abs dy <= raio]
+    raioBomba = [createPoint (takeX pos + dx) (takeY pos + dy) | dx <- [-raio..raio],
+                                                                 dy <- [-raio..raio],
+                                                                 abs dx + abs dy <= raio]
     pontosAfetados = filter(`notElem` walls mapa) raioBomba
     explosion = createExplosion (pontosAfetados)
     boxesRestantes = filter (`notElem` pontosAfetados) (boxes mapa)
