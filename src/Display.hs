@@ -15,7 +15,7 @@ symbollToChar S_bomb        = 'δ'
 symbollToChar S_explosion   = '𖤌'
 symbollToChar S_playerDeath = '𖣛'
 symbollToChar S_key         = 'K'
-symbollToChar S_door        = 'n' 
+symbollToChar S_door        = 'n'
 
 movePointer :: Int -> Int -> IO()
 movePointer x y = setCursorPosition y x
@@ -44,14 +44,11 @@ display map = do
     case key map of
         Just k -> displayPoint k S_key sgrKey
         Nothing -> return () -- A chave não será desenhada após ser coletada
-    displayPoint (player map) S_player [Reset]
+    displayPoint  (player map) S_player [Reset] 
     hFlush stdout
     where
         sgrBox = [SetColor Foreground Dull Yellow]
         sgrBomb = [SetConsoleIntensity BoldIntensity, SetBlinkSpeed SlowBlink, SetColor Foreground Vivid White]
         sgrExplosion = [SetColor Foreground Vivid Red, SetConsoleIntensity BoldIntensity]
         sgrKey = [SetColor Foreground Vivid Green]
-        sgrDoor = [SetColor Foreground Vivid Green] 
-
-
-
+        sgrDoor = [SetColor Foreground Vivid Green]
