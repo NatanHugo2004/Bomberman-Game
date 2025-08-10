@@ -58,13 +58,13 @@ display :: Map -> GameConfigs -> Int -> IO()
 display map configs time = do
     clearScreen
     displayPoints (walls map) S_wall [Reset]
+    case key map of
+        Just k -> displayPoint k S_key sgrKey
+        Nothing -> return ()
     displayPoints (boxes map) S_box sgrBox
     displayPoints (allBombsPoints (bombs map)) S_bomb sgrBomb 
     displayPoints (allExplosionsPoints (explosions map)) S_explosion sgrExplosion
     displayPoint (door map) S_door sgrDoor 
-    case key map of
-        Just k -> displayPoint k S_key sgrKey
-        Nothing -> return ()
     displayPoint  (player map) S_player [Reset] 
     displayTimer configs time
     hFlush stdout
