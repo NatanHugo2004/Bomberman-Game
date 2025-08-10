@@ -14,8 +14,8 @@ symbollToChar S_player      = '𖦔'
 symbollToChar S_bomb        = 'δ'
 symbollToChar S_explosion   = '𖤌'
 symbollToChar S_playerDeath = '𖣛'
-symbollToChar S_key         = 'K'
-symbollToChar S_door        = 'n'
+symbollToChar S_key         = '𖠞'
+symbollToChar S_door        = '⇭'
 
 movePointer :: Int -> Int -> IO()
 movePointer x y = setCursorPosition y x
@@ -72,6 +72,6 @@ display map configs time = do
         sgrBox = [SetColor Foreground Dull Yellow]
         sgrBomb = [SetConsoleIntensity BoldIntensity, SetBlinkSpeed SlowBlink, SetColor Foreground Vivid White]
         sgrExplosion = [SetColor Foreground Vivid Red, SetConsoleIntensity BoldIntensity]
-        sgrKey = [SetColor Foreground Vivid Green]
-        sgrDoor = [SetColor Foreground Vivid Green]
+        sgrKey = [SetColor Foreground Vivid Yellow]
+        sgrDoor = [SetConsoleIntensity BoldIntensity,SetColor Foreground Vivid Cyan]
 
