@@ -15,7 +15,7 @@ gameLoop mapRef configs tempoRef = do
     map <- readIORef mapRef
     time <- readIORef tempoRef
     display map configs time
-    threadDelay 100000 
+    threadDelay 1000 
     if (checkGameOver map time) then do 
         displayPoint (player map) S_playerDeath sgrPlayerDeath
         hFlush stdout
