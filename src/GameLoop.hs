@@ -12,12 +12,12 @@ import Control.Concurrent
 
 gameLoop :: IORef Map -> GameConfigs -> IORef Int -> IO ()
 gameLoop mapRef configs tempoRef = do
-    mapa <- readIORef mapRef
-    tempo <- readIORef tempoRef
-    display mapa configs tempo
+    map <- readIORef mapRef
+    time <- readIORef tempoRef
+    display map configs time
     threadDelay 100000 
-    if (checkGameOver mapa tempo) then do 
-        displayPoint (player mapa) S_playerDeath sgrPlayerDeath
+    if (checkGameOver map time) then do 
+        displayPoint (player map) S_playerDeath sgrPlayerDeath
         hFlush stdout
         gameOverScreen configs
     else do   
@@ -27,7 +27,7 @@ gameLoop mapRef configs tempoRef = do
             if input == 'q' then 
                 quitScreen configs
             else do
-                let newMap = updateMap mapa input
+                let newMap = updateMap map input
                 if canExitThroughDoor newMap (player newMap) then 
                     gameWinScreen configs
                 else do

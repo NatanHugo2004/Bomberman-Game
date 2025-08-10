@@ -33,8 +33,29 @@ displayPoints (p:ps) symboll sgr = do
     displayPoint p symboll sgr
     displayPoints ps symboll sgr
 
-display :: Map -> IO()
-display map = do
+displayTimer :: GameConfigs -> Int -> IO ()
+displayTimer configs time = do
+    movePointer 0 ((height configs) + 2)
+    clearLine
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
+    putStr "══ Remaining Time ══\n"
+    setSGR [Reset]
+    putStr $ "│" ++ filled ++ empty ++ "│ "
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
+    putStr $ show time ++ "s "
+    setSGR [Reset]
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
+    putStr "\n════════════════════\n"
+    setSGR [Reset]
+    hFlush stdout
+    where
+        total  = timerGamer configs
+        filled = replicate (time * 13 `div` total) '■'
+        empty  = replicate (13 - length filled) ' '
+        
+
+display :: Map -> GameConfigs -> Int -> IO()
+display map configs time = do
     clearScreen
     displayPoints (walls map) S_wall [Reset]
     displayPoints (boxes map) S_box sgrBox
@@ -45,6 +66,7 @@ display map = do
         Just k -> displayPoint k S_key sgrKey
         Nothing -> return ()
     displayPoint  (player map) S_player [Reset] 
+    displayTimer configs time
     hFlush stdout
     where
         sgrBox = [SetColor Foreground Dull Yellow]
