@@ -2,7 +2,7 @@
 Este repositório é destinado a criar um simples jogo inspirado no
 bomberman utilizando programação funcional!
 ## Execução ##
-### Pré Requisitos:
+### Pré-Requisitos:
 Para executar o código em máquinas windows é recomendável utilizar o subsistema do Windows para Linux(WSL), estando [aqui](https://learn.microsoft.com/pt-br/windows/wsl/install) o manual de instalação.
 É necessário também instalar o Haskell, recomendamos utilizar o GHCup para isso, disponível [aqui](https://www.haskell.org/ghcup/install/). Tendo instalado o Haskell, instale o Stack por meio do comando `curl -sSL https://get.haskellstack.org/`
 ### Executando o Stack: 
