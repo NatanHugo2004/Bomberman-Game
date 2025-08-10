@@ -19,8 +19,8 @@ symbollToChar S_player      = '𖦔'
 symbollToChar S_bomb        = 'δ'
 symbollToChar S_explosion   = '𖤌'
 symbollToChar S_playerDeath = '𖣛'
-symbollToChar S_key         = '𖠞'
-symbollToChar S_door        = '⇭'
+symbollToChar S_key         = '⚷'
+symbollToChar S_door        = 'በ'
 
 -- Função responsável por mover o cursor para uma posição específica no terminal.
 -- | @param x Int: coordenada X (coluna)
