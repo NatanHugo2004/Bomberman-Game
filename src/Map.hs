@@ -7,7 +7,9 @@ import Bomb
 import System.Random.Shuffle
 import System.Random (StdGen) 
 
---Função responsável por captar um caractere e retornar uma função que recebe um ponto e retorna um ponto.
+--Função responsável captar a direção que o player está indo.
+-- | @param c Char: um caractere que representa a direção a qual o player quer ir.
+-- | @return (Point -> Point): uma função que recebe um ponto e retorna um ponto, sendo esta função definida dentro de charToDirection como move.
 charToDirection :: Char -> (Point -> Point)
 charToDirection c = case c of
     'a' -> move (-1) 0
@@ -18,7 +20,10 @@ charToDirection c = case c of
     where
         move x y = \p -> createPoint ((takeX p) + x) ((takeY p) + y)
 
---Função responsável por verificar a validade da posição do player. Recebe um mapa, um ponto e retorna um valor booleano, indicando se o ponto passado como parâmetro pode ser uma posição válido a um jogador, não sendo nem parede, nem caixa, nem bomba.
+--Função responsável por verificar a validade da posição do player. 
+-- | @param map Map: um mapa para ser analisado
+-- | @param newPosition Point: um ponto no mapa, para conferir se é uma posição válida para o player
+-- | @retorn Bool: um booleano representando se a posição é válida ou não, a posição será válida se nela não houver paredes, caixas ou bombas.
 isValidPlayerPos :: Map -> Point -> Bool
 isValidPlayerPos map newPosition = not ((isWall newPosition (walls map)) || 
                                         (isBox  newPosition (boxes map)) || 
