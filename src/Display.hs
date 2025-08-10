@@ -57,14 +57,14 @@ displayTimer configs time = do
     movePointer 0 ((height configs) + 2)
     clearLine
     setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
-    putStr "══ Remaining Time ══\n"
+    putStr "  ◔ Remaining Time\n"
     setSGR [Reset]
     putStr $ "│" ++ filled ++ empty ++ "│ "
     setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
     putStr $ show time ++ "s "
     setSGR [Reset]
     setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
-    putStr "\n════════════════════\n"
+    putStr "\n\n"
     setSGR [Reset]
     hFlush stdout
     where
