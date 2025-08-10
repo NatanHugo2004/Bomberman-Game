@@ -13,12 +13,14 @@ import Control.Concurrent
 
 main :: IO ()
 main = do
+    hSetBuffering stdin NoBuffering
+    hSetEcho stdin False
     let gameConfigs = GameConfigs 8 18 120 
     menu (width gameConfigs) ((height gameConfigs) + 1)
     hFlush stdout
-    escolha <- getLine
+    escolha <- getChar
     setSGR [Reset]
-    if escolha == "1" then
+    if escolha == '1' then
         startGame gameConfigs
     else do
         menuExit ((height gameConfigs) + 1)
