@@ -13,7 +13,7 @@ import Control.Concurrent
 
 main :: IO ()
 main = do
-    let gameConfigs = GameConfigs 8 18 120
+    let gameConfigs = GameConfigs 8 18 30 
     menu (width gameConfigs) ((height gameConfigs) + 1)
     hFlush stdout
     escolha <- getLine

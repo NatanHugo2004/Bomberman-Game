@@ -58,3 +58,51 @@ menuExit height = do
 	setSGR [Reset]
 	showCursor
 	exitSuccess
+
+symbolLoop :: Int -> Char -> IO ()
+symbolLoop 0 _ = putStrLn ""
+symbolLoop n c = do
+    putChar c
+    hFlush stdout
+    threadDelay 300000
+    symbolLoop (n - 1) c
+
+quitScreen :: GameConfigs -> IO ()
+quitScreen configs = do
+    clearScreen
+    setCursorPosition ((height configs) `div` 2 - 2) 0
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Red]
+    putStr "QUITTING"
+    symbolLoop 3 '.'
+    threadDelay 300000
+    setSGR [Reset]
+    showCursor
+
+gameWinScreen :: GameConfigs -> IO ()
+gameWinScreen configs = do
+    clearScreen
+    setCursorPosition ((height configs) `div` 2) 0
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Green]
+    putStrLn "YOU WIN! YOU ESCAPED!"
+    threadDelay 2000000
+    setSGR [Reset]
+    showCursor
+
+gameOverScreen :: GameConfigs -> IO ()
+gameOverScreen configs = do
+    threadDelay 1000000
+    clearScreen
+    setSGR [SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Red]
+    setCursorPosition ((height configs) `div` 2 - 2) 0
+    putStrLn "..."
+    threadDelay 1000000
+    clearLine
+    putStrLn "GAME OVER\nYOU LOSE\n"
+    threadDelay 1300000
+    clearScreen
+    setCursorPosition ((height configs) `div` 2 - 2) 0
+    putStr "IDIOT HAHAHA"
+    symbolLoop 8 '!' 
+    setSGR [Reset]
+    showCursor
+    clearScreen
