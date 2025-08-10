@@ -45,11 +45,11 @@ createWalls height width = [createPoint x y | x <- [0..width], y <- [0, height]]
 -- | @param player Point: um player, para saber a posição do player de forma que o jogo seja vencível
 -- | @param gen StdeGen: um conjunto de números aleatórios para gerar aleatóriedade nas caixas
 -- | @return [Point]: uma lista de pontos representando as caixas destrutivas criadas
-createBoxes :: Int -> Int -> [Point] -> Point -> StdGen -> [Point]
-createBoxes height width walls player gen = take boxesAmount shuffled
+createBoxes :: Int -> Int -> [Point] -> Point -> Point -> StdGen -> [Point]
+createBoxes height width walls player door gen = take boxesAmount shuffled
     where
         allPoints    = [createPoint x y | x <- [1..width-1], y <- [1..height-1]]
-        isValidPoint = \p -> not (p `elem` walls || p `elem` (neighbors player))
+        isValidPoint = \p -> not (p `elem` walls || p `elem` (neighbors player) || p == door)
         validPoints  = filter isValidPoint allPoints
         shuffled     = shuffle' validPoints (length validPoints) gen
         boxesAmount  = ceiling (0.70 * fromIntegral (length validPoints) :: Double)
@@ -65,8 +65,8 @@ createMap height width gen = Map walls boxes player [] [] door (Just keyPosition
     walls       = createWalls height width
     player      = createPoint 1 1
     door        = createPoint (width - 1) (height - 1) 
-    keyPosition = createKeyPosition height width walls player gen
-    boxes       = createBoxes height width walls player gen
+    boxes       = createBoxes height width walls player door gen
+    keyPosition = createKeyPosition boxes player gen
 
 --Função responsável por atualizar um mapa, como na programação funcional os estados não são alterados.
 -- | @param map Map: um mapa que será atualizado 
@@ -87,12 +87,11 @@ updateMap map input
   where
     newBomb = plantBomb (player map) 3
 
-createKeyPosition :: Int -> Int -> [Point] -> Point -> StdGen -> Point
-createKeyPosition height width walls player gen = head $ shuffle' validPoints (length validPoints) gen
+createKeyPosition ::[Point] -> Point -> StdGen -> Point
+createKeyPosition boxes player gen = head $ shuffle' validBoxes (length validBoxes) gen
   where
-    allPoints = [createPoint x y | x <- [width `div` 2..width-1], y <- [height `div` 2..height-1]]
-    isValidPoint p = not (p `elem` walls || p `elem` (neighbors player))
-    validPoints  = filter isValidPoint allPoints   
+    isValidBox p = not (p `elem` (neighbors player))
+    validBoxes  = filter isValidBox boxes   
 
 collectKey :: Map -> Point -> Map
 collectKey mapa newPlayerPos = 
