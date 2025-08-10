@@ -5,12 +5,18 @@ import Structures
 import Utils
 
 
---Função responsável por plantar bombas em uma determinada posição. Recebe um ponto e um inteiro, representando o local que a bomba será plantada, e o tempo de explosão e retornando uma bomba.
+--Função responsável por plantar bombas em uma determinada posição
+-- | @param position Point: o ponto a qual deseja-se plantar a bomba
+-- | @param timer Int: o tempo que a bomba vai demorar para explodir
+-- | return Bomb: uma bomba com a posição e o tempo fornecido
 plantBomb:: Point -> Int -> Bomb
 plantBomb position timer = Bomb { bombPosition = position,
                                   timer        = timer }
 
---Função que adiciona uma bomba em uma lista de bombas, recebendo uma bomba, uma lista de bombas, e retornando uma nova lista de bombas, feita a partir da lista de bombas recebidas + a bomba passada como parâmetro. A bomba só será adicionada caso a lista tenha menos que 3 bombas.
+--Função que adiciona uma bomba em uma lista de bombas
+-- | @param newBomb Bomb: uma nova bomba para ser adicionada na lista
+-- | @param bombs [Bomb]: uma lista de bombas, a qual será adicionada a nova bomba
+-- | @return [Bomb]: uma lista de bombas, que contém a nova bomba passada por parâmetro, adicionando ela apenas se houverem menos de 3 bombass na lista.
 addBomb :: Bomb -> [Bomb] -> [Bomb]
 addBomb newBomb bombs
     | length bombs < 3 = newBomb : bombs  
@@ -43,12 +49,16 @@ createExplosion points = Explosion (points) (1)
 updateExplosion :: Explosion -> Explosion
 updateExplosion explosion = Explosion (explosionPosition explosion) ((time explosion) -1)
 
---Função responsável por retornar todos os pontos de explosão de uma lista de explosões. Recebe uma lista de explosões, uma lista de pontos e retorna uma lista de pontos, que representa os pontos afetados por explosões.
+--Função responsável por retornar todos os pontos de explosão de uma lista de explosões.
+--[
 getExplosionsPoints :: [Explosion] -> [Point] -> [Point]
 getExplosionsPoints [] points = points
 getExplosionsPoints (j:js) points = getExplosionsPoints js (points ++ (explosionPosition j))
 
---Função responsável por verificar se um player está morto ou não, para isso, ele recebe um ponto do mapa(o ponto do player), uma lista de explosões, e verifica se o player está em algum ponto de explosão. 
+--Função responsável por verificar se um player está morto ou não
+-- | @param playerPosition Point: um ponto representando a posição do player
+-- | @param explosions [Explosion]: uma lista de explosões
+-- | @return Bool: um valor booleano, sendo verdadeiro caso a posição fornecida esteja em algum ponto atingido por explosões 
 isDead :: Point -> [Explosion] -> Bool
 isDead playerPosition explosions = playerPosition `elem` (getExplosionsPoints explosions []) 
 

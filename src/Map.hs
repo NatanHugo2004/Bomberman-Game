@@ -7,7 +7,9 @@ import Bomb
 import System.Random.Shuffle
 import System.Random (StdGen) 
 
---Função responsável por captar um caractere e retornar uma função que recebe um ponto e retorna um ponto.
+--Função responsável captar a direção que o player está indo.
+-- | @param c Char: um caractere que representa a direção a qual o player quer ir.
+-- | @return (Point -> Point): uma função que recebe um ponto e retorna um ponto, sendo esta função definida dentro de charToDirection como move.
 charToDirection :: Char -> (Point -> Point)
 charToDirection c = case c of
     'a' -> move (-1) 0
@@ -18,19 +20,31 @@ charToDirection c = case c of
     where
         move x y = \p -> createPoint ((takeX p) + x) ((takeY p) + y)
 
---Função responsável por verificar a validade da posição do player. Recebe um mapa, um ponto e retorna um valor booleano, indicando se o ponto passado como parâmetro pode ser uma posição válido a um jogador, não sendo nem parede, nem caixa, nem bomba.
+--Função responsável por verificar a validade da posição do player. 
+-- | @param map Map: um mapa para ser analisado
+-- | @param newPosition Point: um ponto no mapa, para conferir se é uma posição válida para o player
+-- | @return Bool: um booleano representando se a posição é válida ou não, a posição será válida se nela não houver paredes, caixas ou bombas.
 isValidPlayerPos :: Map -> Point -> Bool
 isValidPlayerPos map newPosition = not ((isWall newPosition (walls map)) || 
                                         (isBox  newPosition (boxes map)) || 
                                         (isBomb newPosition (bombs map)))
 
---Função responsável por criar paredes, recebendo dois inteiros representando a altura e largura do mapa e retornando um conjunto de pontos, representando as paredes.
+--Função responsável por criar paredes.
+-- | @param height Int: a altura do mapa, para criar paredes condizentes com o mapa
+-- | @param width Int: a largura do mapa, para criar paredes condizentes com o mapa
+-- | @return [Point]: uma lista de pontos representando as paredes
 createWalls :: Int -> Int -> [Point]
 createWalls height width = [createPoint x y | x <- [0..width], y <- [0, height]] ++ 
                            [createPoint x y | x <- [0,width], y <- [1..height - 1]] ++ 
                            [createPoint x y | x <- [2, 4..width - 2], y <- [2, 4..height - 2]]
 
---Função responsável por criar caixas destrutivas, recebendo dois inteiros representando a altura e largura do mapa e retornando um conjunto de pontos, representando as caixas destrutivas. 
+--Função responsável por criar caixas destrutivas
+-- | @param height Int: a altura do mapa, para as caixas serem condizentes com o tamanho do mapa
+-- | @param width Int: largura do mapa, para as caixas serem condizentes com o tamanho do mapa
+-- | @param walls [Point]: uma lista de ponto de paredes, para não serem geradas caixas onde existem paredes
+-- | @param player Point: um player, para saber a posição do player de forma que o jogo seja vencível
+-- | @param gen StdeGen: um conjunto de números aleatórios para gerar aleatóriedade nas caixas
+-- | @return [Point]: uma lista de pontos representando as caixas destrutivas criadas
 createBoxes :: Int -> Int -> [Point] -> Point -> StdGen -> [Point]
 createBoxes height width walls player gen = take boxesAmount shuffled
     where
@@ -40,7 +54,11 @@ createBoxes height width walls player gen = take boxesAmount shuffled
         shuffled     = shuffle' validPoints (length validPoints) gen
         boxesAmount  = ceiling (0.70 * fromIntegral (length validPoints) :: Double)
 
---Função responsável por criar um mapa, recebendo dois inteiros representando a altura e a largura do mapa, um conjunto de números aleatórios utilizados para geração das caixas, e retornando um mapa.
+--Função responsável por criar um mapa
+-- | @param height Int: altura do mapa
+-- | @param width Int: largura do mapa
+-- | @param gen StdGen: um conjunto de números aleatórios, para configurar as caixas destrutivas
+-- | @return Map: um mapa inicializado pronto para começar o jogo
 createMap :: Int -> Int -> StdGen -> Map
 createMap height width gen = Map walls boxes player [] [] door (Just keyPosition)  False
   where
@@ -50,7 +68,10 @@ createMap height width gen = Map walls boxes player [] [] door (Just keyPosition
     keyPosition = createKeyPosition height width walls player gen
     boxes       = createBoxes height width walls player gen
 
---Função responsável por atualizar um mapa, como na programação funcional os estados não são alterados, a lógica por trás da updateMap é a de receber um mapa, um caractere(que será usado para mover o personagem) e gerar um novo mapa com as novas posições, bombas e explosões.
+--Função responsável por atualizar um mapa, como na programação funcional os estados não são alterados.
+-- | @param map Map: um mapa que será atualizado 
+-- | @param input Char: um caractere, responsável por sinalizar a ação do player
+-- | @return Map: um novo mapa
 updateMap :: Map -> Char -> Map
 updateMap map input
  | input == ' '                      = map {bombs = addBomb newBomb (bombs map)}
