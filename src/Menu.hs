@@ -1,3 +1,4 @@
+-- | Módulo responsável por exibir o menu do jogo.
 module Menu where
 
 import Utils
@@ -8,9 +9,18 @@ import System.Console.ANSI
 import System.IO (hFlush,stdout)
 import System.Exit
 
+-- | Função responsável por gerar os pontos de um retângulo delimitador.
+-- | @param width Int: largura do retângulo
+-- | @param height Int: altura do retângulo
+-- | @return [Point]: lista de pontos que formam o contorno do retângulo
 retangulo:: Int -> Int -> [Point]
 retangulo width height = [Point (x, y) | x <- [0..width], y <- [0, height]] ++ [Point (x, y) | x <- [0,width], y <- [1..height - 1]]
 
+-- | Função que verifica qual caractere deve ser exibido em uma posição do retângulo.
+-- | @param Point: coordenada a ser verificada
+-- | @param width Int: largura do retângulo
+-- | @param height Int: altura do retângulo
+-- | @return String: caractere correspondente ("+", "|", "-", ou "")
 verificaCaractere :: Point -> Int -> Int-> String
 verificaCaractere (Point (x,y)) width height
  | (x, y) `elem` corners = "+"
@@ -20,6 +30,10 @@ verificaCaractere (Point (x,y)) width height
  where
     corners = [(0, 0), (0, height), (width, 0), (width, height)] 
 
+-- | Função responsável por exibir um retângulo no terminal.
+-- | @param [Point]: lista de pontos que compõem o retângulo
+-- | @param width Int: largura do retângulo
+-- | @param height Int: altura do retângulo
 displayRetangulo :: [Point] -> Int -> Int -> IO()
 displayRetangulo [] width height  = return ()
 displayRetangulo (h:hs) width height = do
@@ -27,6 +41,9 @@ displayRetangulo (h:hs) width height = do
     putStr(verificaCaractere h width height)
     displayRetangulo hs width height
 
+-- | Função que exibe o menu inicial do jogo.
+-- | @param width Int: largura da tela
+-- | @param height Int: altura da tela
 menu :: Int -> Int -> IO()
 menu width height = do
     clearScreen
@@ -44,6 +61,9 @@ menu width height = do
     setSGR[Reset]
     movePointer 9 11
 
+-- | Função que exibe as instruções do jogo no terminal.
+-- | @param width Int: largura da tela
+-- | @param height Int: altura da tela
 instructions :: Int -> Int -> IO()
 instructions width height = do
     clearScreen
@@ -71,7 +91,7 @@ instructions width height = do
     putStr" EXPLOSION AREA "
     setSGR[Reset]
     movePointer 11 6
-    putStr"Destroy walls to find the" 
+    putStr"Destroy boxes to find the" 
     setSGR[SetConsoleIntensity BoldIntensity, SetColor Foreground Vivid Yellow]
     putStr" KEY " 
     setSGR[Reset]
@@ -99,6 +119,8 @@ instructions width height = do
     putStr"PRESS ENTER TO CONTINUE TO THE GAME\n\n"
     setSGR[Reset]
 
+-- | Função responsável por exibir a tela de saída do menu inicial.
+-- | @param height Int: altura da tela
 menuExit :: Int -> IO()
 menuExit height = do 
 	clearScreen
@@ -113,6 +135,9 @@ menuExit height = do
 	showCursor
 	exitSuccess
 
+-- | Função responsável por exibir uma sequência de símbolos no terminal.
+-- | @param n Int: número de símbolos a serem exibidos
+-- | @param c Char: caractere a ser exibido
 symbolLoop :: Int -> Char -> IO ()
 symbolLoop 0 _ = putStrLn ""
 symbolLoop n c = do
@@ -121,6 +146,8 @@ symbolLoop n c = do
     threadDelay 300000
     symbolLoop (n - 1) c
 
+-- | Função responsável por exibir uma tela de saída ao sair do jogo.
+-- | @param configs GameConfigs: configurações do jogo (para altura do mapa)
 quitScreen :: GameConfigs -> IO ()
 quitScreen configs = do
     clearScreen
@@ -133,6 +160,8 @@ quitScreen configs = do
     setSGR [Reset]
     showCursor
 
+-- | Função responsável por exibir uma tela de vitória quando o jogador encontra a saída.
+-- | @param configs GameConfigs: configurações do jogo (para altura do mapa)
 gameWinScreen :: GameConfigs -> IO ()
 gameWinScreen configs = do
     clearScreen
@@ -152,6 +181,8 @@ gameWinScreen configs = do
     mapM_ (\_ -> firework) [1..4]
     showCursor
 
+-- | Função responsável por exibir uma tela de derrota quando o jogador perde.
+-- | @param configs GameConfigs: configurações do jogo (para altura do mapa)
 gameOverScreen :: GameConfigs -> IO ()
 gameOverScreen configs = do
     threadDelay 1000000
@@ -172,6 +203,8 @@ gameOverScreen configs = do
     showCursor
     clearScreen
 
+-- | Função responsável por exibir uma tela de reinício do jogo, perguntando se o jogador deseja jogar novamente.
+-- | @param configs GameConfigs: configurações do jogo (para altura do mapa)
 playAgainScreen :: GameConfigs -> IO()
 playAgainScreen configs = do
     hideCursor
@@ -188,6 +221,8 @@ playAgainScreen configs = do
     setSGR [SetConsoleIntensity NormalIntensity, SetColor Foreground Dull Red]
     putStr("[2] EXIT\n\n")
 
+-- | Função responsável por exibir uma tela de saída quando o jogador não deseja mais jogar.
+-- | @param configs GameConfigs: configurações do jogo (para altura do mapa)
 byeScreen :: GameConfigs -> IO()
 byeScreen configs = do
     clearScreen
@@ -199,7 +234,10 @@ byeScreen configs = do
     putStr"Bye, See you again xD\n\n"
     threadDelay 1000000
     setSGR[Reset]
+    showCursor
 
+-- | Função responsável por obter a entrada do usuário, esperando que ele pressione '1' ou '2'.
+-- | @return Char: o caractere pressionado pelo usuário ('1' ou '2)
 getInput :: IO Char
 getInput = do
     c <- getChar
@@ -207,6 +245,8 @@ getInput = do
         then return c
         else getInput
 
+-- | Função responsável por obter a entrada do usuário, esperando que ele pressione 'Enter'.
+-- | @return Char: o caractere pressionado pelo usuário ('Enter')
 getEnter :: IO Char
 getEnter = do
     c <- getChar

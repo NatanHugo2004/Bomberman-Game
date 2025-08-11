@@ -1,3 +1,4 @@
+-- | Módulo principal do jogo Bomberman, responsável por iniciar o jogo e gerenciar o menu.
 module Main (main) where
 
 import System.IO
@@ -6,6 +7,7 @@ import Structures
 import GameLoop (startGame)
 import Menu
 
+-- | Função principal que configura o terminal, exibe o menu inicial e inicia o jogo conforme escolha do usuário.
 main :: IO ()
 main = do
     hideCursor

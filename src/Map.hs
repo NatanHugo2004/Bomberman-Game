@@ -43,7 +43,8 @@ createWalls height width = [createPoint x y | x <- [0..width], y <- [0, height]]
 -- | @param width Int: largura do mapa, para as caixas serem condizentes com o tamanho do mapa
 -- | @param walls [Point]: uma lista de ponto de paredes, para não serem geradas caixas onde existem paredes
 -- | @param player Point: um player, para saber a posição do player de forma que o jogo seja vencível
--- | @param gen StdeGen: um conjunto de números aleatórios para gerar aleatóriedade nas caixas
+-- | @param door Point: um ponto que representa a porta, para não serem geradas caixas onde existe a porta
+-- | @param gen StdGen: um conjunto de números aleatórios para gerar aleatóriedade nas caixas
 -- | @return [Point]: uma lista de pontos representando as caixas destrutivas criadas
 createBoxes :: Int -> Int -> [Point] -> Point -> Point -> StdGen -> [Point]
 createBoxes height width walls player door gen = take boxesAmount shuffled
@@ -87,12 +88,21 @@ updateMap map input
   where
     newBomb = plantBomb (player map) 3
 
+--Função responsável por criar uma posição para a chave, garantindo que não esteja em um bloco vizinho ao jogador.
+-- | @param boxes [Point]: lista de posições de caixas
+-- | @param player Point: posição atual do jogador
+-- | @param gen StdGen: gerador de números aleatórios
+-- | @return Point: posição gerada para a chave
 createKeyPosition ::[Point] -> Point -> StdGen -> Point
 createKeyPosition boxes player gen = head $ shuffle' validBoxes (length validBoxes) gen
   where
     isValidBox p = not (p `elem` (neighbors player))
     validBoxes  = filter isValidBox boxes   
 
+--Função responsável por atualizar o estado do mapa quando o jogador coleta a chave.
+-- | @param map Map: o mapa atual
+-- | @param newPlayerPos Point: a nova posição do jogador
+-- | @return Map: o mapa atualizado, com a chave coletada se o jogador estiver na posição da chave
 collectKey :: Map -> Point -> Map
 collectKey mapa newPlayerPos = 
   case key mapa of
@@ -102,19 +112,38 @@ collectKey mapa newPlayerPos =
         else mapa { player = newPlayerPos }
     Nothing -> mapa { player = newPlayerPos }  
 
+--Função responsável por verificar se o jogador pode sair pela porta.
+-- | @param mapa Map: o mapa atual
+-- | @param newPlayerPos Point: a nova posição do jogador
+-- | @return Bool: um booleano representando se o jogador pode sair pela porta, ou seja, se o jogador está na posição da porta e já coletou a chave
 canExitThroughDoor :: Map -> Point -> Bool
 canExitThroughDoor mapa newPlayerPos =
   newPlayerPos == door mapa && hasKey mapa
 
-
+--Função responsável por verificar se um elemento está em uma lista.
+-- | @param a Eq a => a: elemento a ser verificado
+-- | @param [a]: lista onde será feita a verificação
+-- | @return Bool: True se o elemento está na lista, False caso contrário
 isIn :: Eq a => a -> [a] -> Bool
 isIn = elem
 
+--Função responsável por verificar se uma posição é uma parede.
+-- | @param Point: ponto a ser verificado
+-- | @param [Point]: lista de posições de paredes
+-- | @return Bool: True se a posição é uma parede
 isWall :: Point -> [Point] -> Bool
 isWall = isIn
 
+--Função responsável por verificar se uma posição é uma caixa.
+-- | @param Point: ponto a ser verificado
+-- | @param [Point]: lista de posições de caixas
+-- | @return Bool: True se a posição é uma caixa
 isBox :: Point -> [Point] -> Bool
 isBox = isIn
 
+--Função responsável por verificar se uma posição contém uma bomba.
+-- | @param point Point: posição a ser verificada
+-- | @param bombs [Bomb]: lista de bombas
+-- | @return Bool: True se a posição contém uma bomba
 isBomb:: Point -> [Bomb] -> Bool
 isBomb point bombs = isIn point (map bombPosition bombs)
