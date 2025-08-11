@@ -99,6 +99,7 @@ display map configs time = do
         sgrKey = [SetColor Foreground Vivid Yellow]
         sgrDoor = [SetConsoleIntensity BoldIntensity,SetColor Foreground Vivid Cyan]
 
+-- | Função responsável por exibir uma animação de fogos de artifício no terminal.
 firework :: IO ()
 firework = do
     let baseLine = 3
@@ -117,11 +118,16 @@ firework = do
 
     explode col color
 
+-- | Função responsável por gerar uma cor aleatória para os fogos de artifício.
+-- | @return Color: cor aleatória escolhida entre vermelho, amarelo, azul, magenta e ciano.
 randomColor :: IO Color
 randomColor = do
     idx <- randomRIO (0, 4) :: IO Int
     return $ [Red, Yellow, Blue, Magenta, Cyan] !! idx
 
+-- | Função responsável por exibir uma explosão de fogos de artifício no terminal.
+-- | @param col Int: coluna onde a explosão deve ocorrer
+-- | @param color Color: cor da explosão
 explode :: Int -> Color -> IO ()
 explode col color = do
     setSGR [SetColor Foreground Vivid color]
