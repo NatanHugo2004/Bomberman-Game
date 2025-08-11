@@ -32,7 +32,7 @@ Certifique-se de ter os seguintes requisitos instalados na sua máquina:
     stack setup
     ```
 
-## Uso
+## Execução
 
 Execute o comando a seguir para iniciar o jogo:
 ```bash
