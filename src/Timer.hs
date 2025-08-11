@@ -1,17 +1,14 @@
-module Timer where
+module Timer (startTimer, startBombTimers, stopThreads) where
 
 import Control.Concurrent
 import Data.IORef
 import Control.Monad
-import Map
+import Data.List (partition)
 import Bomb
 import Structures
-import Data.List
 
-startTimer :: IORef Int -> IO ()
-startTimer tempoRef = do
-    _ <- forkIO $ countdown tempoRef 
-    return ()
+startTimer :: IORef Int -> IO ThreadId
+startTimer tempoRef = forkIO $ countdown tempoRef
 
 countdown :: IORef Int -> IO ()
 countdown tempoRef = do
@@ -22,6 +19,9 @@ countdown tempoRef = do
                 writeIORef tempoRef (tempo - 1)
                 loop
     loop
+
+startBombTimers :: IORef Map -> IO ThreadId
+startBombTimers mapRef = forkIO $ updateBombTimers mapRef
 
 updateBombTimers :: IORef Map -> IO ()
 updateBombTimers mapRef = do
@@ -38,3 +38,6 @@ updateBombTimers mapRef = do
             writeIORef mapRef novoMapa
             loop
     loop
+
+stopThreads :: [ThreadId] -> IO ()
+stopThreads tids = mapM_ killThread tids

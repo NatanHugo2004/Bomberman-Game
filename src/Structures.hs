@@ -13,7 +13,7 @@ data Map = Map { walls      :: [Point],
 
 data GameConfigs = GameConfigs { height     :: Int,
                                  width      :: Int,
-	                             timerGamer :: Int }
+                                timerGamer :: Int }
 
 data Explosion = Explosion { explosionPosition :: [Point],
                              time              :: Int }

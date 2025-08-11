@@ -1,18 +1,14 @@
 module Main (main) where
 
 import System.IO
-import System.Random
 import System.Console.ANSI
 import Structures
-import GameLoop 
-import Map
+import GameLoop (startGame)
 import Menu
-import Timer
-import Data.IORef
-import Control.Concurrent
 
 main :: IO ()
 main = do
+    hideCursor
     hSetBuffering stdin NoBuffering
     hSetEcho stdin False
     let gameConfigs = GameConfigs 8 18 120 
@@ -20,20 +16,17 @@ main = do
     hFlush stdout
     escolha <- getChar
     setSGR [Reset]
-    if escolha == '1' then
-        startGame gameConfigs
+    if escolha == '1' then do
+        instructions (width gameConfigs) (height gameConfigs)
+        hFlush stdout
+        input <- getChar
+        if input == '\n' then
+            startGame gameConfigs
+        else
+            return ()
     else do
         menuExit ((height gameConfigs) + 1)
+        showCursor
 
-startGame :: GameConfigs -> IO ()
-startGame gameConfigs = do
-    hideCursor
-    tempoRef <- newIORef (timerGamer gameConfigs) 
-    startTimer tempoRef
-    hSetBuffering stdin NoBuffering
-    hSetEcho stdin False
-    gen <- newStdGen
-    initialMap <- newIORef (createMap (height gameConfigs) (width gameConfigs) gen)
-    _ <- forkIO $ updateBombTimers initialMap
-    gameLoop initialMap gameConfigs tempoRef
+
     

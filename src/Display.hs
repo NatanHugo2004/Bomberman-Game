@@ -5,6 +5,8 @@ import Structures
 import Utils
 import System.Console.ANSI
 import System.IO
+import Control.Concurrent
+import System.Random
 
 -- Definição dos símbolos gráficos usados no jogo.
 data Symboll = S_wall | S_box | S_player | S_bomb | S_explosion | S_playerDeath | S_key | S_door
@@ -96,4 +98,53 @@ display map configs time = do
         sgrExplosion = [SetColor Foreground Vivid Red, SetConsoleIntensity BoldIntensity]
         sgrKey = [SetColor Foreground Vivid Yellow]
         sgrDoor = [SetConsoleIntensity BoldIntensity,SetColor Foreground Vivid Cyan]
+
+firework :: IO ()
+firework = do
+    let baseLine = 3
+    col <- randomRIO (30,45)     
+    height <- randomRIO (5, 14)    
+    color <- randomColor
+    mapM_ (\h -> do
+        setCursorPosition (baseLine - h + height) col
+        setSGR [SetColor Foreground Vivid color]
+        putStr "|"
+        hFlush stdout
+        threadDelay 120000
+        setCursorPosition (baseLine - h + height) col
+        putStr " "
+        ) [0..height]
+
+    explode col color
+
+randomColor :: IO Color
+randomColor = do
+    idx <- randomRIO (0, 4) :: IO Int
+    return $ [Red, Yellow, Blue, Magenta, Cyan] !! idx
+
+explode :: Int -> Color -> IO ()
+explode col color = do
+    setSGR [SetColor Foreground Vivid color]
+    setCursorPosition 5 col
+    putStr "*"
+    hFlush stdout
+    threadDelay 200000
+    setCursorPosition 4 (col-1)
+    putStr "o*o"
+    setCursorPosition 6 (col-1)
+    putStr "o*o"
+    setCursorPosition 5 (col-2)
+    putStr "*   *"
+    hFlush stdout
+    threadDelay 300000
+    setSGR [SetColor Foreground Dull color]
+    setCursorPosition 3 (col-2)
+    putStr " . . "
+    setCursorPosition 7 (col-2)
+    putStr " . . "
+    setCursorPosition 5 (col-4)
+    putStr ".     ."
+    hFlush stdout
+    threadDelay 400000
+    mapM_ (\r -> do setCursorPosition r (col-5); putStr "         ") [3..7]
 
