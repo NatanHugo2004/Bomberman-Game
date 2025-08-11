@@ -23,10 +23,15 @@ addBomb newBomb bombs
     | otherwise        = bombs
 
 -- Função responsável por atualizar a bomba, diminuindo seu tempo, recebendo uma bomba e retornando uma nova bomba com o campo timer decrementado.
+-- | @param Bomb : a bomba que será atualizada
+-- | @return Bomb: a bomba atualizada
 updateBomb:: Bomb -> Bomb
 updateBomb bomb = Bomb (bombPosition bomb) ((timer bomb) -1)
 
 -- Função responsável por explodir bombas de um mapa, recebendo um mapa, uma lista de bombaas, retornaando um novo mapa com as bombas explodidas e uma nova explosão criada.
+-- | @param Map    : o mapa que conterá as bombas
+-- | @param [Bomb] : lista de bombas que vão ser explodidas
+-- | @return Map   : o mapa com as explosões e com as consequências das explosões
 explodeBombs :: Map -> [Bomb] -> Map
 explodeBombs mapa [] = mapa
 explodeBombs mapa (b:bs) = explodeBombs mapaAtualizado bs
@@ -41,16 +46,22 @@ explodeBombs mapa (b:bs) = explodeBombs mapaAtualizado bs
     boxesRestantes = filter (`notElem` pontosAfetados) (boxes mapa)
     mapaAtualizado = mapa { boxes = boxesRestantes, explosions = explosion: explosions mapa}
 
---Função responsável por criar uma nova explosão. Recebendo uma lista de pontos e retornadno uma explosão.
+-- Função responsável por criar uma nova explosão. Recebendo uma lista de pontos e retornadno uma explosão.
+-- | @param [Point]    : lista de pontos que possui da explosão
+-- | @return Explosion : a explosão
 createExplosion :: [Point] -> Explosion
 createExplosion points = Explosion (points) (1)
 
---Função responsável por atualizar uma explosão, recebendo uma explosão e retornando uma nova explosão, com os mesmos campos da anterior, porém com o timer decrementado.
+-- Função responsável por atualizar uma explosão, recebendo uma explosão e retornando uma nova explosão, com os mesmos campos da anterior, porém com o timer decrementado.
+-- | @param Explosion : explosão que deve ser atualizada
+-- | @return Explosion: explosão atualizada
 updateExplosion :: Explosion -> Explosion
 updateExplosion explosion = Explosion (explosionPosition explosion) ((time explosion) -1)
 
---Função responsável por retornar todos os pontos de explosão de uma lista de explosões.
---[
+-- Função responsável por retornar todos os pontos de explosão de uma lista de explosões.
+-- | @param [Explosion] : lista de todas as explosões
+-- | @param [Point]     : lista temporária que contém os pontos das explosões
+-- | @return [Point]    : lista de todos os pontos de explosão
 getExplosionsPoints :: [Explosion] -> [Point] -> [Point]
 getExplosionsPoints [] points = points
 getExplosionsPoints (j:js) points = getExplosionsPoints js (points ++ (explosionPosition j))
