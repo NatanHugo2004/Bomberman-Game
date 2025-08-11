@@ -14,16 +14,16 @@ main = do
     let gameConfigs = GameConfigs 8 18 120 
     menu (width gameConfigs) ((height gameConfigs) + 1)
     hFlush stdout
-    escolha <- getChar
+    escolha <- getInput
     setSGR [Reset]
     if escolha == '1' then do
         instructions (width gameConfigs) (height gameConfigs)
         hFlush stdout
-        input <- getChar
+        input <- getEnter
         if input == '\n' then
             startGame gameConfigs
         else
-            return ()
+            return()
     else do
         menuExit ((height gameConfigs) + 1)
         showCursor

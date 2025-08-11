@@ -149,7 +149,7 @@ gameWinScreen configs = do
     symbolLoop 3 '!'
     threadDelay 1000000
     setSGR [Reset]
-    mapM_ (\_ -> firework) [1..5]
+    mapM_ (\_ -> firework) [1..4]
     showCursor
 
 gameOverScreen :: GameConfigs -> IO ()
@@ -200,7 +200,18 @@ byeScreen configs = do
     threadDelay 1000000
     setSGR[Reset]
 
+getInput :: IO Char
+getInput = do
+    c <- getChar
+    if c == '1' || c == '2'
+        then return c
+        else getInput
 
-
+getEnter :: IO Char
+getEnter = do
+    c <- getChar
+    if c == '\n'
+        then return c
+        else getEnter
     
 

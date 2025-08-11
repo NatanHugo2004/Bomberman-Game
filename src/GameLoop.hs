@@ -23,11 +23,11 @@ gameLoop mapRef configs tempoRef bombTID timerID = do
         hFlush stdout
         gameOverScreen configs
         playAgainScreen configs
-        input <- getChar
+        input <- getInput
         if input == '1' then do
             stopThreads [bombTID, timerID]
             startGame configs
-        else do
+        else 
             byeScreen configs
     else do   
         inputAvailable <- hReady stdin 
@@ -40,7 +40,7 @@ gameLoop mapRef configs tempoRef bombTID timerID = do
                 if canExitThroughDoor newMap (player newMap) then do
                     gameWinScreen configs
                     playAgainScreen configs
-                    playInput <- getChar
+                    playInput <- getInput
                     if playInput == '1' then do
                         stopThreads [bombTID, timerID]
                         startGame configs
